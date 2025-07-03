@@ -1,0 +1,39 @@
+trigger: none
+
+pr: none
+
+resources:
+  pipelines:
+    - pipeline: terraform-ci
+      source: Infrastructure PR
+      trigger:
+        branches:
+          include:
+            - main
+  repositories:
+    - repository: templates
+      type: github
+      endpoint: Planning-Inspectorate
+      name: Planning-Inspectorate/common-pipeline-templates
+      ref: refs/tags/release/3.21.2
+
+extends:
+  template: pipelines/terraform_plan_apply.yml@templates
+  parameters:
+    environments:
+      - name: Dev
+      - name: Test
+        dependsOn:
+          - Dev
+      - name: Training
+        dependsOn:
+          - Test
+      - name: Prod
+        dependsOn:
+          - Training
+    serviceConnectionPrefix: Azure DevOps Pipelines - <service-name> - Infrastructure
+    storageAccountName: pinssttfstateuks<service-name>
+    resourceGroupName: pins-rg-shared-terraform-uks
+    containerPrefix: terraform-state-<service-name>-
+    workingDirectory: $(Build.Repository.LocalPath)/infrastructure
+    environmentVarFilePath: $(Build.Repository.LocalPath)/infrastructure/environments

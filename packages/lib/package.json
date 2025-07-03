@@ -1,0 +1,29 @@
+{
+  "name": "@pins/service-name-lib",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@azure/msal-node": "*",
+    "@microsoft/microsoft-graph-client": "*",
+    "@pins/dynamic-forms": "^0.0.0",
+    "@pins/service-name-database": "*",
+    "cfb": "*",
+    "connect-redis": "*",
+    "express-session": "*",
+    "file-type": "*",
+    "notifications-node-client": "*",
+    "pdf-lib": "*",
+    "pino": "*",
+    "pino-pretty": "*",
+    "redis": "*"
+  },
+  "devDependencies": {
+    "sass": "*"
+  }
+}

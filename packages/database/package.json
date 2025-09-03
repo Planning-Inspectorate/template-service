@@ -16,7 +16,6 @@
     "@prisma/client": "*"
   },
   "devDependencies": {
-    "@faker-js/faker": "*",
     "dotenv": "*",
     "prisma": "*"
   }

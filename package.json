@@ -24,7 +24,7 @@
     "test-coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@azure/identity": "^4.11.1",
+    "@azure/identity": "^4.12.0",
     "@azure/msal-node": "^3.7.3",
     "@prisma/client": "^6.16.1",
     "accessible-autocomplete": "^3.0.1",

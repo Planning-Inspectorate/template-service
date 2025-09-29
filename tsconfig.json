@@ -1,0 +1,18 @@
+{
+	"exclude": ["packages/database/client/**/*", "packages/database/client/*", "**/*.test.ts"],
+	"compilerOptions": {
+		"allowImportingTsExtensions": true,
+		"noImplicitAny": false,
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"checkJs": false,
+		"erasableSyntaxOnly": true,
+		"esModuleInterop": true,
+		"module": "es2022",
+		"moduleResolution": "node",
+		"noEmit": true,
+		"strict": true,
+		"target": "esnext"
+	}
+}

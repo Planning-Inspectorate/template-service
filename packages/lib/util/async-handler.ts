@@ -1,14 +1,6 @@
-/**
- * @template A
- * @template B
- * @template C
- * @template D
- * @template {Record<string, any>} E
- *
- * @param {import('express').RequestHandler<A, B, C, D, E>} requestHandler
- * @returns {import('express').RequestHandler<A, B, C, D, E>}
- */
-export function asyncHandler(requestHandler) {
+export function asyncHandler<A, B, C, D, E extends Record<string, any>>(
+	requestHandler: import('express').RequestHandler<A, B, C, D, E>
+): import('express').RequestHandler<A, B, C, D, E> {
 	return (request, response, next) => {
 		try {
 			const p = requestHandler(request, response, next);

@@ -6,9 +6,8 @@ describe('log-requests', () => {
 	describe('buildLogRequestsMiddleware', () => {
 		test('logs basic request information', (t) => {
 			const logger = {
-				debug() {}
+				debug: mock.fn()
 			};
-			t.mock.method(logger, 'debug');
 			const handler = buildLogRequestsMiddleware(logger);
 			const res = {
 				statusCode: 200,

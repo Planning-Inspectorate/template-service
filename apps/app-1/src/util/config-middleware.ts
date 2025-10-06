@@ -1,8 +1,9 @@
+import type { Handler } from 'express';
+
 /**
  * Add configuration values to locals.
- * @returns {import('express').Handler}
  */
-export function addLocalsConfiguration() {
+export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
 		const path = req.path;
 

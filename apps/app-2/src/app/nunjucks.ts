@@ -4,9 +4,9 @@ import nunjucks from 'nunjucks';
 import { loadBuildConfig } from './config.ts';
 
 /**
- * @returns {import('nunjucks').Environment}
+ * Configure nunjucks with govuk and app folders for loading views
  */
-export function configureNunjucks() {
+export function configureNunjucks(): nunjucks.Environment {
 	const config = loadBuildConfig();
 
 	// get the require function, see https://nodejs.org/api/module.html#modulecreaterequirefilename

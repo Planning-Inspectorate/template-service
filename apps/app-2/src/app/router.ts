@@ -4,12 +4,13 @@ import { createMonitoringRoutes } from '@pins/service-name-lib/controllers/monit
 import { createRoutes as createItemRoutes } from './views/items/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
+import type { App2Service } from '#service';
+import type { IRouter } from 'express';
 
 /**
- * @param {import('#service').App2Service} service
- * @returns {import('express').Router}
+ * Main app router
  */
-export function buildRouter(service) {
+export function buildRouter(service: App2Service): IRouter {
 	const router = createRouter();
 	const monitoringRoutes = createMonitoringRoutes(service);
 	const { router: authRoutes, guards: authGuards } = createAuthRoutesAndGuards(service);

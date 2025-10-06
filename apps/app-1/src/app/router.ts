@@ -3,12 +3,13 @@ import { createMonitoringRoutes } from '@pins/service-name-lib/controllers/monit
 import { createRoutes as appRoutes } from './views/home/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
+import type { App1Service } from '#service';
+import type { IRouter } from 'express';
 
 /**
- * @param {import('#service').App1Service} service
- * @returns {import('express').Router}
+ * Main app router
  */
-export function buildRouter(service) {
+export function buildRouter(service: App1Service): IRouter {
 	const router = createRouter();
 
 	const monitoringRoutes = createMonitoringRoutes(service);

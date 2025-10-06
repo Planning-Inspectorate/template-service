@@ -1,7 +1,6 @@
 import { Prisma } from '@pins/service-name-database/src/client';
 
 interface BaseConfig {
-	appHostname: string;
 	cacheControl: {
 		maxAge: string;
 	};

@@ -1,15 +1,17 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
+import type { BaseConfig } from '@pins/service-name-lib/app/config-types';
+
+export interface Config extends BaseConfig {}
 
 // cache the config
-/** @type {undefined|import('./config-types.js').Config} */
-let config;
+let config: Config | undefined;
 
 /**
- * @returns {import('./config-types.js').Config}
+ * Load configuration from the environment
  */
-export function loadConfig() {
+export function loadConfig(): Config {
 	if (config) {
 		return config;
 	}
@@ -70,11 +72,15 @@ export function loadConfig() {
 	return config;
 }
 
+export interface BuildConfig {
+	srcDir: string;
+	staticDir: string;
+}
+
 /**
  * Config required for the build script
- * @returns {{srcDir: string, staticDir: string}}
  */
-export function loadBuildConfig() {
+export function loadBuildConfig(): BuildConfig {
 	// get the file path for the directory this file is in
 	const dirname = path.dirname(fileURLToPath(import.meta.url));
 	// get the file path for the src directory

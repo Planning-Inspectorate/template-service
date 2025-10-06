@@ -1,11 +1,9 @@
 import { Router as createRouter } from 'express';
 import { firewallErrorPage } from './controller.ts';
+import type { App1Service } from '#service';
+import type { IRouter } from 'express';
 
-/**
- * @param {import('#service').App1Service} service
- * @returns {import('express').Router}
- */
-export function createErrorRoutes(service) {
+export function createErrorRoutes(service: App1Service): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const firewallError = firewallErrorPage(service);

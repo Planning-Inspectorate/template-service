@@ -7,7 +7,7 @@ import { buildMsalConfig } from '#util/auth.ts';
 const scopes = ['User.Read'];
 
 export class AuthService {
-	/** @type {import('../config-types.js').Config['auth']} */
+	/** @type {import('../config').Config['auth']} */
 	#config;
 	#logger;
 	#redisClient;
@@ -17,7 +17,7 @@ export class AuthService {
 	/**
 	 *
 	 * @param {Object} opts
-	 * @param {import('../config-types.js').Config['auth']} opts.config
+	 * @param {import('../config').Config['auth']} opts.config
 	 * @param {import('pino').Logger} opts.logger
 	 * @param {import('@pins/service-name-lib/redis/redis-client').RedisClient|null} [opts.redisClient]
 	 */

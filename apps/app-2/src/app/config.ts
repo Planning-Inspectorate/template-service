@@ -1,13 +1,30 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
+import type { BaseConfig } from '@pins/service-name-lib/app/config-types';
+
+export interface Config extends BaseConfig {
+	appHostname: string;
+	auth: {
+		authority: string;
+		clientId: string;
+		clientSecret: string;
+		disabled: boolean;
+		groups: {
+			// group ID for accessing the application
+			applicationAccess: string;
+		};
+		redirectUri: string;
+		signoutUrl: string;
+	};
+}
+
+export type ENVIRONMENT_NAMES = Readonly<{ PROD: string; DEV: string; TEST: string; TRAINING: string }>;
 
 /**
  * The environment names
- *
- * @type {Readonly<{PROD: string, DEV: string, TEST: string, TRAINING: string}>}
  */
-export const ENVIRONMENT_NAME = Object.freeze({
+export const ENVIRONMENT_NAME: ENVIRONMENT_NAMES = Object.freeze({
 	DEV: 'dev',
 	TEST: 'test',
 	TRAINING: 'training',
@@ -15,13 +32,12 @@ export const ENVIRONMENT_NAME = Object.freeze({
 });
 
 // cache the config
-/** @type {undefined|import('./config-types.js').Config} */
-let config;
+let config: Config | undefined;
 
 /**
- * @returns {import('./config-types.js').Config}
+ * Load configuration from the environment
  */
-export function loadConfig() {
+export function loadConfig(): Config {
 	if (config) {
 		return config;
 	}
@@ -82,14 +98,14 @@ export function loadConfig() {
 	const protocol = APP_HOSTNAME?.startsWith('localhost') ? 'http://' : 'https://';
 
 	config = {
-		appHostname: APP_HOSTNAME,
+		appHostname: APP_HOSTNAME || '',
 		auth: {
 			authority: `https://login.microsoftonline.com/${AUTH_TENANT_ID}`,
-			clientId: AUTH_CLIENT_ID,
-			clientSecret: AUTH_CLIENT_SECRET,
+			clientId: AUTH_CLIENT_ID || '',
+			clientSecret: AUTH_CLIENT_SECRET || '',
 			disabled: authDisabled,
 			groups: {
-				applicationAccess: AUTH_GROUP_APPLICATION_ACCESS
+				applicationAccess: AUTH_GROUP_APPLICATION_ACCESS || ''
 			},
 			redirectUri: `${protocol}${APP_HOSTNAME}/auth/redirect`,
 			signoutUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/logout'
@@ -120,11 +136,15 @@ export function loadConfig() {
 	return config;
 }
 
+export interface BuildConfig {
+	srcDir: string;
+	staticDir: string;
+}
+
 /**
  * Config required for the build script
- * @returns {{srcDir: string, staticDir: string}}
  */
-export function loadBuildConfig() {
+export function loadBuildConfig(): BuildConfig {
 	// get the file path for the directory this file is in
 	const dirname = path.dirname(fileURLToPath(import.meta.url));
 	// get the file path for the src directory
@@ -142,10 +162,8 @@ export function loadBuildConfig() {
  * Load the environment the application is running in. The value should be
  * one of the ENVIRONMENT_NAME values defined at the top of the file, and matches
  * the environment variable in the infrastructure code.
- *
- * @returns {string}
  */
-export function loadEnvironmentConfig() {
+export function loadEnvironmentConfig(): string {
 	// load configuration from .env file into process.env
 	dotenv.config();
 

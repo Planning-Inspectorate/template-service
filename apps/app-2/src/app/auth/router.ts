@@ -3,13 +3,22 @@ import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
 import { buildCompleteMsalAuthentication, buildHandleSignout, buildStartMsalAuthentication } from './controller.ts';
 import { assertIsUnauthenticated, buildAssertGroupAccess, buildAssertIsAuthenticated } from './guards.ts';
 import { AuthService, clearAuthenticationData, registerAuthLocals } from './auth-service.ts';
+import type { App2Service } from '#service';
+import type { IRouter, Handler } from 'express';
+
+export interface AuthRoutesAndGuards {
+	router: IRouter;
+	guards: {
+		assertIsAuthenticated: Handler;
+		assertGroupAccess: Handler;
+	};
+}
 
 /**
- * @param {import('#service').App2Service} service
- * @param {import('./auth-service.js').AuthService} [authService] - for testing
- * @returns {{router: import('express').Router, guards: {assertIsAuthenticated: import('express').Handler, assertGroupAccess: import('express').Handler}}}
+ * @param service
+ * @param authService - for testing
  */
-export function createRoutesAndGuards(service, authService) {
+export function createRoutesAndGuards(service: App2Service, authService?: AuthService): AuthRoutesAndGuards {
 	const router = createRouter();
 	if (!authService) {
 		authService = new AuthService({

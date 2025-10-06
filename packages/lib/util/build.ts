@@ -3,17 +3,18 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { copyFile, copyFolder } from './copy.ts';
 
+interface SassOptions {
+	staticDir: string;
+	srcDir: string;
+	govUkRoot: string;
+}
+
 /**
  * Compile sass into a css file in the .static folder
  *
  * @see https://sass-lang.com/documentation/js-api/#md:usage
- * @param {Object} options
- * @param {string} options.staticDir
- * @param {string} options.srcDir
- * @param {string} options.govUkRoot
- * @returns {Promise<void>}
  */
-async function compileSass({ staticDir, srcDir, govUkRoot }) {
+async function compileSass({ staticDir, srcDir, govUkRoot }: SassOptions): Promise<void> {
 	const styleFile = path.join(srcDir, 'app', 'sass/style.scss');
 	const out = sass.compile(styleFile, {
 		// ensure scss can find the govuk-frontend folders
@@ -30,16 +31,18 @@ async function compileSass({ staticDir, srcDir, govUkRoot }) {
 	await fs.writeFile(outputPath, out.css);
 }
 
+interface AssetOptions {
+	staticDir: string;
+	govUkRoot: string;
+}
+
 /**
  * Copy govuk assets into the .static folder
  *
  * @see https://frontend.design-system.service.gov.uk/importing-css-assets-and-javascript/#copy-the-font-and-image-files-into-your-application
- * @param {Object} options
- * @param {string} options.staticDir
- * @param {string} options.govUkRoot
  * @returns {Promise<void>}
  */
-async function copyAssets({ staticDir, govUkRoot }) {
+async function copyAssets({ staticDir, govUkRoot }: AssetOptions): Promise<void> {
 	const images = path.join(govUkRoot, 'node_modules/govuk-frontend/dist/govuk/assets/images');
 	const fonts = path.join(govUkRoot, 'node_modules/govuk-frontend/dist/govuk/assets/fonts');
 	const js = path.join(govUkRoot, 'node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js');
@@ -60,15 +63,15 @@ async function copyAssets({ staticDir, govUkRoot }) {
 	await copyFolder(rebrand, staticRebrand);
 }
 
+interface AutocompleteOptions {
+	staticDir: string;
+	root: string;
+}
+
 /**
  * Copy accessible-autocomplete assets into the .static folder
- *
- * @param {Object} options
- * @param {string} options.staticDir
- * @param {string} options.root
- * @returns {Promise<void>}
  */
-async function copyAutocompleteAssets({ staticDir, root }) {
+async function copyAutocompleteAssets({ staticDir, root }: AutocompleteOptions): Promise<void> {
 	const js = path.join(root, 'accessible-autocomplete.min.js');
 	const css = path.join(root, 'accessible-autocomplete.min.css');
 
@@ -79,17 +82,17 @@ async function copyAutocompleteAssets({ staticDir, root }) {
 	await copyFile(css, staticCss);
 }
 
+interface BuildOptions {
+	staticDir: string;
+	srcDir: string;
+	govUkRoot: string;
+	accessibleAutocompleteRoot?: string;
+}
+
 /**
  * Do all steps to run the
- *
- * @param {Object} options
- * @param {string} options.staticDir
- * @param {string} options.srcDir
- * @param {string} options.govUkRoot
- * @param {string} [options.accessibleAutocompleteRoot]
- * @returns {Promise<void[]>}
  */
-export function runBuild({ staticDir, srcDir, govUkRoot, accessibleAutocompleteRoot }) {
+export function runBuild({ staticDir, srcDir, govUkRoot, accessibleAutocompleteRoot }: BuildOptions): Promise<void[]> {
 	const tasks = [compileSass({ staticDir, srcDir, govUkRoot }), copyAssets({ staticDir, govUkRoot })];
 	if (accessibleAutocompleteRoot) {
 		tasks.push(copyAutocompleteAssets({ staticDir, root: accessibleAutocompleteRoot }));

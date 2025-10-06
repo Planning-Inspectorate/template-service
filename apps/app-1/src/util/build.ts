@@ -5,10 +5,8 @@ import { runBuild } from '@pins/service-name-lib/util/build.ts';
 
 /**
  * Do all steps to run the build
- *
- * @returns {Promise<void>}
  */
-async function run() {
+async function run(): Promise<void> {
 	const require = createRequire(import.meta.url);
 	// resolves to <root>/node_modules/govuk-frontend/dist/govuk/all.bundle.js than maps to `<root>`
 	const govUkRoot = path.resolve(require.resolve('govuk-frontend'), '../../../../..');

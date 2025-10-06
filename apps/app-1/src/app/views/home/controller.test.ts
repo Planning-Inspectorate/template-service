@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { buildHomePage } from './controller.ts';

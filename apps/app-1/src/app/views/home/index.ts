@@ -1,12 +1,10 @@
 import { Router as createRouter } from 'express';
 import { buildHomePage } from './controller.ts';
 import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import type { App1Service } from '#service';
+import type { IRouter } from 'express';
 
-/**
- * @param {import('#service').App1Service} service
- * @returns {import('express').Router}
- */
-export function createRoutes(service) {
+export function createRoutes(service: App1Service): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const homePageController = buildHomePage(service);

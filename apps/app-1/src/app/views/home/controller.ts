@@ -1,8 +1,10 @@
+import type { App1Service } from '#service';
+import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler';
+
 /**
- * @param {import('#service').App1Service} service
- * @returns {import('express').Handler}
+ * Example home page controller
  */
-export function buildHomePage(service) {
+export function buildHomePage(service: App1Service): AsyncRequestHandler {
 	const { db, logger } = service;
 	return async (req, res) => {
 		let connected = false;

@@ -1,8 +1,6 @@
 {
 	"extends": "../../tsconfig.json",
-	"include": ["**/*.ts"],
-	"exclude": ["src/server/static", "scripts", "coverage"],
-	"files": [],
+	"exclude": ["src/.static"],
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {

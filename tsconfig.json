@@ -1,5 +1,6 @@
 {
-	"exclude": ["packages/database/client/**/*", "packages/database/client/*", "**/*.test.ts"],
+	"include": ["**/*.ts"],
+	"exclude": ["node_modules", "packages/database/src/client/**", "**/*.test.ts"],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"noImplicitAny": false,
@@ -9,8 +10,8 @@
 		"checkJs": false,
 		"erasableSyntaxOnly": true,
 		"esModuleInterop": true,
-		"module": "es2022",
-		"moduleResolution": "node",
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
 		"noEmit": true,
 		"strict": true,
 		"target": "esnext"

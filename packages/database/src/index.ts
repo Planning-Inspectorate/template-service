@@ -1,14 +1,12 @@
-import { PrismaClient } from '@pins/service-name-database/src/client/index.ts';
+import { PrismaClient } from '@pins/service-name-database/src/client/index.js';
+import type { Prisma } from '@pins/service-name-database/src/client/client.d.ts';
+import type { Logger } from 'pino';
 
-/** @typedef {import('@pins/service-name-database/src/client').Prisma.PrismaClientOptions} prismaConfig */
-
-/**
- * @param {{database: prismaConfig, NODE_ENV: string}} config
- * @param {import('pino').Logger} logger
- * @returns {import('@pins/service-name-database/src/client').PrismaClient}
- */
-export function initDatabaseClient(config, logger) {
-	let prismaLogger;
+export function initDatabaseClient(
+	config: { database: Prisma.PrismaClientOptions; NODE_ENV: string },
+	logger: Logger
+): PrismaClient {
+	let prismaLogger: Logger | undefined;
 
 	if (config.NODE_ENV !== 'production') {
 		prismaLogger = logger;
@@ -17,48 +15,37 @@ export function initDatabaseClient(config, logger) {
 	return newDatabaseClient(config.database, prismaLogger);
 }
 
-/**
- * @param {prismaConfig} prismaConfig
- * @param {import('pino').Logger} [logger]
- * @returns {import('@pins/service-name-database/src/client').PrismaClient}
- */
-export function newDatabaseClient(prismaConfig, logger) {
-	prismaConfig.log = [
-		{
-			emit: 'event',
-			level: 'query'
-		},
-		{
-			emit: 'event',
-			level: 'error'
-		},
-		{
-			emit: 'event',
-			level: 'info'
-		},
-		{
-			emit: 'event',
-			level: 'warn'
-		}
-	];
-	const prisma = new PrismaClient(prismaConfig);
+export function newDatabaseClient(prismaConfig: Prisma.PrismaClientOptions, logger?: Logger): PrismaClient {
+	const prisma = new PrismaClient({
+		...prismaConfig,
+		log: [
+			{
+				emit: 'event',
+				level: 'query'
+			},
+			{
+				emit: 'event',
+				level: 'error'
+			},
+			{
+				emit: 'event',
+				level: 'info'
+			},
+			{
+				emit: 'event',
+				level: 'warn'
+			}
+		]
+	});
 
 	if (logger) {
-		/** @param {import('@pins/service-name-database/src/client').Prisma.QueryEvent} e */
-		const logQuery = (e) => {
-			logger.debug('Query: ' + e.query);
-			logger.debug('Params: ' + e.params);
-			logger.debug('Duration: ' + e.duration + 'ms');
+		const logQuery = (e: Prisma.QueryEvent) => {
+			logger.debug({ query: e.query, params: e.params, duration: e.duration }, 'Prisma query');
 		};
 
-		/** @param {import('@pins/service-name-database/src/client').Prisma.LogEvent} e */
-		const logError = (e) => logger.error({ e }, 'Prisma error');
-
-		/** @param {import('@pins/service-name-database/src/client').Prisma.LogEvent} e */
-		const logInfo = (e) => logger.debug({ e });
-
-		/** @param {import('@pins/service-name-database/src/client').Prisma.LogEvent} e */
-		const logWarn = (e) => logger.warn({ e });
+		const logError = (e: Prisma.LogEvent) => logger.error({ e }, 'Prisma error');
+		const logInfo = (e: Prisma.LogEvent) => logger.debug({ e });
+		const logWarn = (e: Prisma.LogEvent) => logger.warn({ e });
 
 		prisma.$on('query', logQuery);
 		prisma.$on('error', logError);

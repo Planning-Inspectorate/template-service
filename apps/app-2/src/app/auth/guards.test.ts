@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { mockLogger } from '@pins/service-name-lib/testing/mock-logger.ts';

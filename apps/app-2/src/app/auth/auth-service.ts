@@ -1,27 +1,33 @@
 import * as authSession from './session.service.ts';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 import { buildMsalConfig } from '#util/auth.ts';
+import type { Config } from '../config.ts';
+import type { AccountInfo, AuthenticationResult, Configuration } from '@azure/msal-node';
+import type { Logger } from 'pino';
+import type { RedisClient } from '@pins/service-name-lib/redis/redis-client.ts';
+import type { RequestHandler } from 'express';
 
-/** @typedef {import('@azure/msal-node').AccountInfo} AccountInfo */
+type AuthenticationResultWithNonce = AuthenticationResult & {
+	idTokenClaims: {
+		nonce?: string;
+	};
+};
 
 const scopes = ['User.Read'];
 
-export class AuthService {
-	/** @type {import('../config').Config['auth']} */
-	#config;
-	#logger;
-	#redisClient;
-	/** @type {ConfidentialClientApplication|null} */
-	#msalClient;
+export interface AuthServiceOptions {
+	config: Config['auth'];
+	logger: Logger;
+	redisClient: RedisClient | null;
+}
 
-	/**
-	 *
-	 * @param {Object} opts
-	 * @param {import('../config').Config['auth']} opts.config
-	 * @param {import('pino').Logger} opts.logger
-	 * @param {import('@pins/service-name-lib/redis/redis-client').RedisClient|null} [opts.redisClient]
-	 */
-	constructor({ config, logger, redisClient }) {
+export class AuthService {
+	readonly #config: Config['auth'];
+	readonly #logger: Logger;
+	readonly #redisClient: RedisClient | null;
+	#msalClient: ConfidentialClientApplication | null;
+
+	constructor({ config, logger, redisClient }: AuthServiceOptions) {
 		this.#config = config;
 		this.#logger = logger;
 		this.#redisClient = redisClient;
@@ -30,15 +36,16 @@ export class AuthService {
 	}
 
 	/**
-	 * Acquire a {@link AuthenticationResult} using a code sourced from the user
+	 * Acquire a {@link AuthenticationResultWithNonce} using a code sourced from the user
 	 * having signed in manually at a MSAL authentication url.
-	 *
-	 * @param {Object} opts
-	 * @param {string} opts.code
-	 * @param {string} opts.sessionId
-	 * @returns {Promise<import('@azure/msal-node').AuthenticationResult | null>}
 	 */
-	async acquireTokenByCode({ code, sessionId }) {
+	async acquireTokenByCode({
+		code,
+		sessionId
+	}: {
+		code: string;
+		sessionId: string;
+	}): Promise<AuthenticationResultWithNonce | null> {
 		const msalClient = this.#getMsalClient(sessionId);
 		await msalClient.getTokenCache().getAllAccounts(); // required to trigger beforeCacheAccess
 
@@ -51,16 +58,15 @@ export class AuthService {
 	}
 
 	/**
-	 * Acquire a new {@link AuthenticationResult} using an account. Note that
-	 * `acquireTokenSilent` will use a cached access token where posisble, and only
+	 * Acquire a new {@link AuthenticationResultWithNonce} using an account. Note that
+	 * `acquireTokenSilent` will use a cached access token where possible, and only
 	 * use a network request as a last resort.
-	 *
-	 * @param {AccountInfo} account
-	 * @param {string} sessionId
-	 * @param {string[]} customScopes
-	 * @returns {Promise<import('@azure/msal-node').AuthenticationResult | null>}
 	 */
-	async acquireTokenSilent(account, sessionId, customScopes = scopes) {
+	async acquireTokenSilent(
+		account: AccountInfo,
+		sessionId: string,
+		customScopes: string[] = scopes
+	): Promise<AuthenticationResultWithNonce | null> {
 		const msalClient = this.#getMsalClient(sessionId);
 		await msalClient.getTokenCache().getAllAccounts(); // required to trigger beforeCacheAccess
 
@@ -74,12 +80,8 @@ export class AuthService {
 	 * Clear the token cache of all accounts/access tokens. This will force the
 	 * msalClient to renegotiate authentication via a network request. To be used
 	 * when signing a user out.
-	 *
-	 * @param {AccountInfo} account
-	 * @param {string} sessionId
-	 * @returns {Promise<void>}
 	 */
-	async clearCacheForAccount(account, sessionId) {
+	async clearCacheForAccount(account: AccountInfo, sessionId: string): Promise<void> {
 		const msalClient = this.#getMsalClient(sessionId);
 		await msalClient.getTokenCache().removeAccount(account);
 	}
@@ -87,12 +89,8 @@ export class AuthService {
 	/**
 	 * Obtain a url for the user to sign in using MSAL authentication. This url is
 	 * scoped to the application via the `nonce` property.
-	 *
-	 * @param {{ nonce: string }} options
-	 * @param {string} sessionId
-	 * @returns {Promise<string>}
 	 */
-	async getAuthCodeUrl(options, sessionId) {
+	async getAuthCodeUrl(options: { nonce: string }, sessionId: string): Promise<string> {
 		const msalClient = this.#getMsalClient(sessionId);
 		return msalClient.getAuthCodeUrl({
 			...options,
@@ -103,14 +101,10 @@ export class AuthService {
 	}
 
 	/**
-	 *
 	 * If not using Redis, behave as a singleton and return the one global MSAL client.
 	 * If using Redis, generate an MSAL client specific to the user's session ID.
-	 *
-	 * @param {string} sessionId
-	 * @returns {ConfidentialClientApplication}
 	 */
-	#getMsalClient(sessionId) {
+	#getMsalClient(sessionId: string): ConfidentialClientApplication {
 		const msalConfig = this.#buildMsalConfig();
 		if (this.#redisClient) {
 			return new ConfidentialClientApplication({
@@ -127,25 +121,21 @@ export class AuthService {
 	}
 
 	/**
-	 *
-	 * @returns {import('@azure/msal-node').Configuration}
 	 */
-	#buildMsalConfig() {
+	#buildMsalConfig(): Configuration {
 		const config = this.#config;
 		const logger = this.#logger;
 		return buildMsalConfig({ config, logger });
 	}
 }
 
-/** @type {import('express').RequestHandler} */
-export const registerAuthLocals = (req, res, next) => {
+export const registerAuthLocals: RequestHandler = (req, res, next) => {
 	const account = authSession.getAccount(req.session);
 	res.locals.isAuthenticated = Boolean(account);
 	next();
 };
 
-/** @type {import('express').RequestHandler} */
-export const clearAuthenticationData = ({ session }, _, next) => {
+export const clearAuthenticationData: RequestHandler = ({ session }, _, next) => {
 	authSession.destroyAuthenticationData(session);
 	next();
 };

@@ -1,4 +1,7 @@
 import * as authSession from './session.service.ts';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { AuthService } from './auth-service.ts';
+import type { Logger } from 'pino';
 
 const _403View = 'views/errors/403';
 
@@ -17,12 +20,8 @@ const _403View = 'views/errors/403';
  *
  * The user is ultimately considered authenticated with the application if the
  * existing authentication result could be silently refreshed.
- *
- * @param {import('pino').Logger} logger
- * @param {import('./auth-service.js').AuthService} authService
- * @returns {import('express').RequestHandler}
  */
-export function buildAssertIsAuthenticated(logger, authService) {
+export function buildAssertIsAuthenticated(logger: Logger, authService: AuthService): RequestHandler {
 	return async (request, response, next) => {
 		const sessionAccount = authSession.getAccount(request.session);
 
@@ -54,10 +53,8 @@ export function buildAssertIsAuthenticated(logger, authService) {
 
 /**
  * Assert the user is unauthenticated.
- *
- * @type {import('express').RequestHandler}
  */
-export function assertIsUnauthenticated({ session }, response, next) {
+export function assertIsUnauthenticated({ session }: Request, response: Response, next: NextFunction): void {
 	if (!authSession.getAccount(session)) {
 		next();
 	} else {
@@ -67,28 +64,24 @@ export function assertIsUnauthenticated({ session }, response, next) {
 
 /**
  * Assert that the user's authenticated account has access to the provided groups.
- *
- * @param  {import('pino').Logger} logger
- * @param  {...string} groupIds
- * @returns {import('express').RequestHandler}
  */
-export function buildAssertGroupAccess(logger, ...groupIds) {
+export function buildAssertGroupAccess(logger: Logger, ...groupIds: string[]): RequestHandler {
 	return (req, res, next) => {
 		const account = authSession.getAccount(req.session);
 
-		if (account?.idTokenClaims.groups) {
+		if (Array.isArray(account?.idTokenClaims?.groups)) {
 			for (const groupId of groupIds) {
 				if (groupId && account.idTokenClaims.groups.includes(groupId)) {
 					return next();
 				}
 			}
 			logger.warn(
-				{ actual: account?.idTokenClaims.groups, expected: groupIds },
+				{ actual: account.idTokenClaims.groups, expected: groupIds },
 				'Authorisation failed. User does not belong to any of the expected groups.'
 			);
 			return res.status(403).render(_403View);
 		}
-		if (account?.idTokenClaims.claimName || account?.idTokenClaims.claimSources) {
+		if (account?.idTokenClaims?.claimName || account?.idTokenClaims?.claimSources) {
 			logger.error('Authorisation error. User has too many groups: groups overage claim occurred.');
 		} else {
 			logger.warn('Authorisation error. User does not belong to any groups.');
@@ -99,11 +92,8 @@ export function buildAssertGroupAccess(logger, ...groupIds) {
 
 /**
  * Assert that the user's authenticated account has access to the provided groups.
- *
- * @param  {string} permission The primary permissions to check for
- * @returns {import('express').RequestHandler}
  */
-export function assertUserHasPermission(permission) {
+export function assertUserHasPermission(permission: string): RequestHandler {
 	return (req, res, next) => {
 		const permissions = req.session.permissions;
 

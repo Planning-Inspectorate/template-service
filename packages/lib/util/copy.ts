@@ -13,7 +13,7 @@ export async function copyFolder(from, to) {
 	await fs.mkdir(to, { recursive: true });
 	// read the directory to be copied
 	const ls = await fs.readdir(from);
-	const tasks = [];
+	const tasks: Promise<void>[] = [];
 	for (const item of ls) {
 		// for each file, or folder, add a task to the list to copy that file or folder
 		tasks.push(copyFileOrFolder(path.join(from, item), path.join(to, item)));

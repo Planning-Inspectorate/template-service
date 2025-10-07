@@ -1,4 +1,4 @@
-import { Prisma } from '@pins/service-name-database/src/client/index.ts';
+import { Prisma } from '@pins/service-name-database/src/client/index.js';
 
 /**
  * @param {string} [id]

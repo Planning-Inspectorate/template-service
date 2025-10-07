@@ -1,5 +1,5 @@
 import type { App1Service } from '#service';
-import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler';
+import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
 
 /**
  * Example home page controller

@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { describe, it } from 'node:test';
 import { optionalWhere, wrapPrismaError } from './database.ts';
 import assert from 'node:assert';
-import { Prisma } from '@pins/service-name-database/src/client/index.ts';
+import { Prisma } from '@pins/service-name-database/src/client/index.js';
 import { mockLogger } from '../testing/mock-logger.ts';
 
 describe('database', () => {

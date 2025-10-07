@@ -1,16 +1,20 @@
 import { Router as createRouter } from 'express';
 import { asyncHandler } from '../util/async-handler.ts';
 import { cacheNoStoreMiddleware } from '../middleware/cache.ts';
-/**
- * @param {Object} params
- * @param {import('pino').BaseLogger} params.logger
- * @param {string} [params.gitSha]
- * @param {import('@pins/service-name-database/src/client').PrismaClient} params.dbClient
- * @returns {import('express').Router}
- */
-export function createMonitoringRoutes({ gitSha, dbClient, logger }) {
+import type { BaseLogger } from 'pino';
+import type { PrismaClient } from '@pins/service-name-database/src/client';
+import type { IRouter, Response, Request } from 'express';
+import type { AsyncRequestHandler } from '../util/async-handler.ts';
+
+interface MonitoringRoutesOptions {
+	logger: BaseLogger;
+	dbClient: PrismaClient;
+	gitSha?: string;
+}
+
+export function createMonitoringRoutes({ gitSha, dbClient, logger }: MonitoringRoutesOptions): IRouter {
 	const router = createRouter();
-	const handleHealthCheck = buildHandleHeathCheck(logger, gitSha, dbClient);
+	const handleHealthCheck = buildHandleHeathCheck(logger, dbClient, gitSha);
 
 	router.use(cacheNoStoreMiddleware); // don't store monitoring responses, always get fresh data
 
@@ -20,19 +24,16 @@ export function createMonitoringRoutes({ gitSha, dbClient, logger }) {
 	return router;
 }
 
-/** @type {import('express').RequestHandler} */
-export function handleHeadHealthCheck(_, response) {
+export function handleHeadHealthCheck(_: Request, response: Response) {
 	// no-op - HEAD mustn't return a body
 	response.sendStatus(200);
 }
 
-/**
- * @param {import('pino').BaseLogger} logger
- * @param {string} [gitSha]
- * @param {import('@pins/service-name-database/src/client').PrismaClient} dbClient
- * @returns {import('express').RequestHandler}
- */
-export function buildHandleHeathCheck(logger, gitSha, dbClient) {
+export function buildHandleHeathCheck(
+	logger: BaseLogger,
+	dbClient: PrismaClient,
+	gitSha?: string
+): AsyncRequestHandler {
 	return async (_, response) => {
 		let database = false;
 		try {

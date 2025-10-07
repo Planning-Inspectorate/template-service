@@ -1,13 +1,9 @@
 import { LogLevel } from '@azure/msal-node';
+import type { Configuration } from '@azure/msal-node';
+import type { Logger } from 'pino';
+import type { Config } from '../app/config.ts';
 
-/**
- *
- * @param {Object} opts
- * @param {import('../app/config').Config['auth']} opts.config
- * @param {import('pino').Logger} opts.logger
- * @returns {import('@azure/msal-node').Configuration}
- */
-export function buildMsalConfig({ config, logger }) {
+export function buildMsalConfig({ config, logger }: { config: Config['auth']; logger: Logger }): Configuration {
 	return {
 		auth: {
 			authority: config.authority,

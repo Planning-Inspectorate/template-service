@@ -1,11 +1,12 @@
 import { RedisClient } from './redis-client.ts';
+import type { Logger } from 'pino';
 
-/**
- * @param {{redis: string, redisPrefix: string}} config
- * @param {import('pino').Logger} logger
- * @returns {import('@pins/service-name-lib/redis/redis-client').RedisClient|null}
- */
-export function initRedis(config, logger) {
+interface RedisConfig {
+	redis?: string;
+	redisPrefix: string;
+}
+
+export function initRedis(config: RedisConfig, logger: Logger): RedisClient | null {
 	if (!config.redis) {
 		return null;
 	}

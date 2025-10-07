@@ -1,12 +1,11 @@
 import { Prisma } from '@pins/service-name-database/src/client/index.js';
+import type { Logger } from 'pino';
+import type { ErrorRequestHandler, Request, Response } from 'express';
 
 /**
  * A catch-all error handler to use as express middleware
- *
- * @param {import('pino').Logger} logger
- * @returns {import('express').ErrorRequestHandler}
  */
-export function buildDefaultErrorHandlerMiddleware(logger) {
+export function buildDefaultErrorHandlerMiddleware(logger: Logger): ErrorRequestHandler {
 	return (error, req, res, next) => {
 		const wrappedError = wrapPrismaErrors(error);
 		const message = wrappedError.message || 'unknown error';
@@ -30,11 +29,8 @@ export function buildDefaultErrorHandlerMiddleware(logger) {
 /**
  * Wrap prisma errors so they are not shown directly to users.
  * This is a fallback, controllers should handle Prisma validation errors directly so that error messages can be specific
- *
- * @param {Error} error
- * @returns {Error}
  */
-export function wrapPrismaErrors(error) {
+export function wrapPrismaErrors(error: Error): Error {
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
 		return new Error(`Request could not be handled (code: ${error.code})`);
 	}
@@ -56,10 +52,8 @@ export function wrapPrismaErrors(error) {
 
 /**
  * A catch-all handler to serve a 404 page
- *
- * @type {import('express').RequestHandler}
  */
-export function notFoundHandler(req, res) {
+export function notFoundHandler(req: Request, res: Response) {
 	res.status(404);
 	res.render(`views/layouts/error`, {
 		pageTitle: 'Page not found',

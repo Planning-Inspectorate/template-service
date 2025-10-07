@@ -13,9 +13,9 @@ export class RedisClient {
 	private readonly prefix: string;
 	private readonly logger: Logger;
 	private readonly client: RedisClientType;
-	private readonly store: RedisStore;
-	private readonly get: (key: string) => Promise<null | string>;
-	private readonly set: (key: string, value: string) => void;
+	readonly store: RedisStore;
+	readonly get: (key: string) => Promise<null | string>;
+	readonly set: (key: string, value: string) => void;
 	private readonly clientWrapper: MSALCacheClient;
 
 	/**

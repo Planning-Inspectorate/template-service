@@ -1,7 +1,6 @@
-/**
- * @param {import('@pins/service-name-database/src/client').PrismaClient} dbClient
- */
-export async function seedDev(dbClient) {
+import type { PrismaClient } from '@pins/service-name-database/src/client';
+
+export async function seedDev(dbClient: PrismaClient) {
 	// TODO: add seed data
 	await dbClient.$queryRaw`SELECT 1`;
 

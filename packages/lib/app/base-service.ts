@@ -1,33 +1,21 @@
 import { initDatabaseClient } from '@pins/service-name-database';
 import { initLogger } from '../util/logger.ts';
 import { initRedis } from '../redis/index.ts';
+import type { BaseConfig } from './config-types.d.ts';
+import type { Logger } from 'pino';
+import type { PrismaClient } from '@pins/service-name-database/src/client';
+import type { RedisClient } from '../redis/redis-client.ts';
 
 /**
  * This class encapsulates all the services and clients for the application
  */
 export class BaseService {
-	/**
-	 * @type {import('./config-types.js').BaseConfig}
-	 * @private
-	 */
-	#config;
-	/**
-	 * @type {import('pino').Logger}
-	 */
-	logger;
-	/**
-	 * @type {import('@pins/service-name-database/src/client').PrismaClient}
-	 */
-	dbClient;
-	/**
-	 * @type {import('../redis/redis-client.js').RedisClient|null}
-	 */
-	redisClient;
+	#config: BaseConfig;
+	logger: Logger;
+	dbClient: PrismaClient;
+	redisClient: RedisClient | null;
 
-	/**
-	 * @param {import('./config-types.js').BaseConfig} config
-	 */
-	constructor(config) {
+	constructor(config: BaseConfig) {
 		this.#config = config;
 		const logger = initLogger(config);
 		this.logger = logger;

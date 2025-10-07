@@ -1,15 +1,11 @@
-/**
- * @type {import('express').Handler}
- */
-export function cacheNoStoreMiddleware(req, res, next) {
+import type { Response, Request, NextFunction } from 'express';
+
+export function cacheNoStoreMiddleware(req: Request, res: Response, next: NextFunction) {
 	res.set('Cache-Control', 'no-store');
 	next();
 }
 
-/**
- * @type {import('express').Handler}
- */
-export function cacheNoCacheMiddleware(req, res, next) {
+export function cacheNoCacheMiddleware(req: Request, res: Response, next: NextFunction) {
 	res.set('Cache-Control', 'no-cache');
 	next();
 }

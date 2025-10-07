@@ -1,8 +1,7 @@
-/**
- * @param {import('#service').App2Service} service
- * @returns {import('express').Handler}
- */
-export function buildListItems(service) {
+import type { App2Service } from '#service';
+import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
+
+export function buildListItems(service: App2Service): AsyncRequestHandler {
 	const { db, logger } = service;
 	return async (req, res) => {
 		logger.info('list items');

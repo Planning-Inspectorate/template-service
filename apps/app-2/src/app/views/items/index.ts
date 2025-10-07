@@ -1,12 +1,10 @@
 import { Router as createRouter } from 'express';
 import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
 import { buildListItems } from './list/controller.ts';
+import type { App2Service } from '#service';
+import type { IRouter } from 'express';
 
-/**
- * @param {import('#service').App2Service} service
- * @returns {import('express').Router}
- */
-export function createRoutes(service) {
+export function createRoutes(service: App2Service): IRouter {
 	const router = createRouter({ mergeParams: true });
 	const listItems = buildListItems(service);
 

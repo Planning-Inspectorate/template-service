@@ -1,11 +1,14 @@
+import type { ICacheClient } from '@azure/msal-node';
+import type { AccountEntity } from '@azure/msal-common';
+import type { BaseLogger } from 'pino';
+
 export class PartitionManager {
-	/**
-	 * @param {import('@azure/msal-node').ICacheClient} redisClient
-	 * @param {string} sessionId
-	 * @param {import('pino').BaseLogger} logger
-	 * @param {string} [keyPrefix]
-	 * */
-	constructor(redisClient, sessionId, logger, keyPrefix = 'sess:') {
+	private readonly redisClient: ICacheClient;
+	private readonly sessionId: string;
+	private readonly logger: BaseLogger;
+	private readonly keyPrefix: string;
+
+	constructor(redisClient: ICacheClient, sessionId: string, logger: BaseLogger, keyPrefix: string = 'sess:') {
 		this.redisClient = redisClient;
 		this.sessionId = sessionId;
 		this.logger = logger;
@@ -15,22 +18,18 @@ export class PartitionManager {
 	/**
 	 * @returns {Promise<string>}
 	 * */
-	async getKey() {
+	async getKey(): Promise<string> {
 		try {
 			const sessionData = await this.redisClient.get(`${this.keyPrefix}${this.sessionId}`);
 			const session = JSON.parse(sessionData);
 			return session.account?.homeAccountId || '';
-		} catch (/** @type {*} */ err) {
+		} catch (err: any) {
 			this.logger.error(err.msg);
 			return '';
 		}
 	}
 
-	/**
-	 * @param {import('@azure/msal-common').AccountEntity} accountEntity
-	 * @returns {Promise<string>}
-	 * */
-	async extractKey(accountEntity) {
+	async extractKey(accountEntity: AccountEntity): Promise<string> {
 		if (!accountEntity.homeAccountId) {
 			throw new Error('homeAccountId not found');
 		}

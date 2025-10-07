@@ -1,13 +1,15 @@
 import helmet from 'helmet';
 import crypto from 'node:crypto';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { Handler } from 'express';
 
-/**
- * @param {import('helmet').ContentSecurityPolicyOptions['directives']} directives
- * @returns {import('express').Handler[]}
- */
-export function initContentSecurityPolicyMiddlewares(directives) {
-	/** @type {import('express').Handler[]} */
-	const middlewares = [];
+// not directly exported from helmet types??
+type ContentSecurityPolicyDirectiveValueFunction = (req: IncomingMessage, res: ServerResponse) => string;
+type ContentSecurityPolicyDirectiveValue = string | ContentSecurityPolicyDirectiveValueFunction;
+type HelmetCspDirectives = Record<string, null | Iterable<ContentSecurityPolicyDirectiveValue>>;
+
+export function initContentSecurityPolicyMiddlewares(directives: HelmetCspDirectives): Handler[] {
+	const middlewares: Handler[] = [];
 
 	// Generate the nonce for each request
 	middlewares.push((req, res, next) => {

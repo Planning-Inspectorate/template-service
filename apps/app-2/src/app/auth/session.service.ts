@@ -16,18 +16,10 @@ export interface AuthState {
 
 export type SessionWithAuth = Session & AuthState;
 
-/**
- * @param {SessionWithAuth} session
- * @returns {void}
- */
 export const destroyAuthenticationData = (session: SessionWithAuth): void => {
 	delete session?.authenticationData;
 };
 
-/**
- * @param session
- * @returns
- */
 export const getAuthenticationData = (session: SessionWithAuth): AuthenticationData => {
 	if (session?.authenticationData) {
 		return session?.authenticationData;
@@ -35,28 +27,14 @@ export const getAuthenticationData = (session: SessionWithAuth): AuthenticationD
 	throw new Error('Authentication does not exist.');
 };
 
-/**
- * @param {SessionWithAuth} session
- * @param {AuthenticationData} data
- * @returns {void}
- */
 export const setAuthenticationData = (session: SessionWithAuth, data: AuthenticationData): void => {
 	session.authenticationData = data;
 };
 
-/**
- * @param {SessionWithAuth} session
- * @returns {void}
- */
 export const destroyAccount = (session: SessionWithAuth): void => {
 	delete session?.account;
 };
 
-/**
- * @param session
- * @param authenticationResult
- * @returns
- */
 export const setAccount = (session: SessionWithAuth, authenticationResult: AuthenticationResult): void => {
 	const { account, accessToken, idToken, expiresOn } = authenticationResult;
 
@@ -71,10 +49,6 @@ export const setAccount = (session: SessionWithAuth, authenticationResult: Authe
 	};
 };
 
-/**
- * @param session
- * @returns
- */
 export const getAccount = (session: SessionWithAuth): AccountInfo | undefined => {
 	return session?.account;
 };

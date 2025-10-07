@@ -1,43 +1,30 @@
-/**
- * @typedef {Object} CacheEntry
- * @property {Date} updated
- * @property {*} value
- */
+interface CacheEntry {
+	updated: Date;
+	value: any;
+}
 
 export class MapCache {
-	/** @type {Map<string, CacheEntry>} */
-	cache = new Map();
-	/** @type {number} */
-	#ttl;
+	cache: Map<string, CacheEntry> = new Map();
+	readonly #ttl: number;
 
-	/**
-	 * @param {number} ttlMinutes
-	 */
-	constructor(ttlMinutes) {
+	constructor(ttlMinutes: number) {
 		this.#ttl = ttlMinutes * 60 * 1000; // to ms
 	}
 
-	/**
-	 * @param {string} id
-	 * @returns {undefined|*}
-	 */
-	get(id) {
+	get(id: string): any | undefined {
 		const entry = this.cache.get(id);
 		if (!entry) {
 			return undefined;
 		}
-		if (new Date() - entry.updated > this.#ttl) {
+		const now = new Date();
+		if (now.getTime() - entry.updated.getTime() > this.#ttl) {
 			this.cache.delete(id);
 			return undefined;
 		}
 		return entry.value;
 	}
 
-	/**
-	 * @param {string} id
-	 * @param {*} value
-	 */
-	set(id, value) {
+	set(id: string, value: any) {
 		this.cache.set(id, { updated: new Date(), value });
 	}
 }

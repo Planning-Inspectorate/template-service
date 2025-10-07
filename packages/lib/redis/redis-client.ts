@@ -3,22 +3,34 @@ import { RedisStore } from 'connect-redis';
 import { MSALCacheClient } from './msal-cache-client.ts';
 import { PartitionManager } from './partition-manager.ts';
 import { DistributedCachePlugin } from '@azure/msal-node';
+import type { Logger } from 'pino';
+import type { RedisClientType } from 'redis';
+import type { IPartitionManager } from '@azure/msal-node';
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 export class RedisClient {
+	private readonly prefix: string;
+	private readonly logger: Logger;
+	private readonly client: RedisClientType;
+	private readonly store: RedisStore;
+	private readonly get: (key: string) => Promise<null | string>;
+	private readonly set: (key: string, value: string) => void;
+	private readonly clientWrapper: MSALCacheClient;
+
 	/**
-     @param {string} connString - Redis connection string
-     @param {import('pino').Logger} logger
-     @param {string} [prefix] - prefix to use for shared instances
+     @param connString - Redis connection string
+     @param logger
+     @param prefix - prefix to use for shared instances
    **/
-	constructor(connString, logger, prefix) {
+	constructor(connString: string, logger: Logger, prefix?: string) {
 		this.prefix = prefix + 'sess:';
 		this.logger = logger;
 
 		const redisParams = parseRedisConnectionString(connString);
 
 		this.client = createClient({
+			// @ts-ignore
 			socket: {
 				host: redisParams.host,
 				port: redisParams.port,
@@ -30,8 +42,7 @@ export class RedisClient {
 			pingInterval: FIVE_MINUTES_MS
 		});
 
-		/** @param {Error} err */
-		const onError = (err) => logger.error(`Could not establish a connection with redis server: ${err}`);
+		const onError = (err: Error) => logger.error(`Could not establish a connection with redis server: ${err}`);
 
 		this.client.on('connect', () => logger.info('Initiating connection to redis server...'));
 		this.client.on('ready', () => logger.info('Connected to redis server successfully...'));
@@ -54,33 +65,25 @@ export class RedisClient {
 		this.clientWrapper = new MSALCacheClient(this.client);
 	}
 
-	/**
-	 * @param {string} sessionId
-	 * @returns {import('@azure/msal-node').DistributedCachePlugin}
-	 * */
-	makeCachePlugin(sessionId) {
+	makeCachePlugin(sessionId: string): DistributedCachePlugin {
 		const partitionManager = new PartitionManager(this.clientWrapper, sessionId, this.logger, this.prefix);
-		return new DistributedCachePlugin(
-			this.clientWrapper,
-			/** @type {import('@azure/msal-node').IPartitionManager} */ partitionManager
-		);
+		return new DistributedCachePlugin(this.clientWrapper, partitionManager as IPartitionManager);
 	}
 }
 
-/**
- * @typedef {Object} RedisConnectionDetails
- * @property {string} host
- * @property {number} port
- * @property {string} password
- * @property {boolean} ssl
- * @property {boolean} abortConnect
- */
+export interface RedisConnectionDetails {
+	host: string;
+	port: number;
+	password: string;
+	ssl: boolean;
+	abortConnect: boolean;
+}
 
 /**
  * @param {string} str - in the form 'some.example.org:6380,password=some_password,ssl=True,abortConnect=False'
  * @returns {RedisConnectionDetails}
  */
-export function parseRedisConnectionString(str) {
+export function parseRedisConnectionString(str: string): RedisConnectionDetails {
 	if (typeof str !== 'string') {
 		throw new Error('not a string');
 	}

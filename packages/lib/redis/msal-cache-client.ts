@@ -1,25 +1,16 @@
+import type { RedisClientType } from 'redis';
+
 export class MSALCacheClient {
-	/**
-	 * @param {ReturnType<import('redis').createClient>} redisClient
-	 * */
-	constructor(redisClient) {
+	private readonly redisClient: RedisClientType;
+	constructor(redisClient: RedisClientType) {
 		this.redisClient = redisClient;
 	}
 
-	/**
-	 * @param {string} key
-	 * @returns {Promise<string>}
-	 * */
-	async get(key) {
+	async get(key: string): Promise<string> {
 		return (await this.redisClient.get(key)) ?? '';
 	}
 
-	/**
-	 * @param {string} key
-	 * @param {string} value
-	 * @returns {Promise<string>}
-	 * */
-	async set(key, value) {
+	async set(key: string, value: string): Promise<string> {
 		return (await this.redisClient.set(key, value)) ?? '';
 	}
 }

@@ -3,7 +3,6 @@
 	"exclude": ["node_modules", "packages/database/src/client/**", "**/*.test.ts"],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
-		"noImplicitAny": false,
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",

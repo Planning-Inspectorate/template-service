@@ -1,10 +1,12 @@
 import pino from 'pino';
+import type { Logger } from 'pino';
 
-/**
- * @param {{logLevel: string, NODE_ENV: string}} config
- * @returns {import('pino').Logger}
- */
-export function initLogger(config) {
+interface InitLoggerOptions {
+	logLevel: string;
+	NODE_ENV: string;
+}
+
+export function initLogger(config: InitLoggerOptions): Logger {
 	// pino-pretty options: https://github.com/pinojs/pino-pretty?tab=readme-ov-file#options
 	const transport = {
 		targets: [

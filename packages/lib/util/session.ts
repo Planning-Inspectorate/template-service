@@ -1,16 +1,16 @@
 import session from 'express-session';
+import type { RedisClient } from '../redis/redis-client.js';
+import type { RequestHandler, Request } from 'express';
 
 const DEFAULT_SESSION_FIELD = 'cases';
 
-/**
- *
- * @param {object} options
- * @param {import('../redis/redis-client').RedisClient|null} options.redis
- * @param {string} options.secret
- * @param {boolean} options.secure
- * @returns
- */
-export function initSessionMiddleware({ redis, secure, secret }) {
+interface InitSessionOptions {
+	redis: RedisClient | null;
+	secure: boolean;
+	secret: string;
+}
+
+export function initSessionMiddleware({ redis, secure, secret }: InitSessionOptions): RequestHandler {
 	let store;
 	if (redis) {
 		store = redis.store;
@@ -33,13 +33,13 @@ export function initSessionMiddleware({ redis, secure, secret }) {
 
 /**
  * Add data to a session, by id and field
- *
- * @param {{session?: Object<string, any>}} req
- * @param {string} id
- * @param {Object<string, *>} data
- * @param {string} [sessionField]
  */
-export function addSessionData(req, id, data, sessionField = DEFAULT_SESSION_FIELD) {
+export function addSessionData(
+	req: Request,
+	id: string,
+	data: Record<string, any>,
+	sessionField: string = DEFAULT_SESSION_FIELD
+) {
 	if (!req.session) {
 		throw new Error('request session required');
 	}
@@ -49,16 +49,15 @@ export function addSessionData(req, id, data, sessionField = DEFAULT_SESSION_FIE
 }
 
 /**
- * Read a case updated flag from the session
- *
- * @param {{session?: Object<string, any>}} req
- * @param {string} id
- * @param {string} field
- * @param {*} defaultValue
- * @param {string} [sessionField]
- * @returns {*}
+ * Read a value from the session
  */
-export function readSessionData(req, id, field, defaultValue, sessionField = DEFAULT_SESSION_FIELD) {
+export function readSessionData<T>(
+	req: Request,
+	id: string,
+	field: string,
+	defaultValue: T,
+	sessionField: string = DEFAULT_SESSION_FIELD
+): T | boolean {
 	if (!req.session) {
 		return false;
 	}
@@ -68,13 +67,13 @@ export function readSessionData(req, id, field, defaultValue, sessionField = DEF
 
 /**
  * Clear a case updated flag from the session
- *
- * @param {{session?: Object<string, any>}} req
- * @param {string} id
- * @param {string | string[]} fieldOrFields
- * @param {string} [sessionField]
  */
-export function clearSessionData(req, id, fieldOrFields, sessionField = DEFAULT_SESSION_FIELD) {
+export function clearSessionData(
+	req: Request,
+	id: string,
+	fieldOrFields: string | string[],
+	sessionField: string = DEFAULT_SESSION_FIELD
+) {
 	if (!req.session) {
 		return; // no need to error here
 	}

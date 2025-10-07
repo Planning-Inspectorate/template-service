@@ -4,23 +4,26 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import { initContentSecurityPolicyMiddlewares } from '../middleware/csp-middleware.ts';
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '../middleware/errors.ts';
+import type { BaseService } from './base-service.ts';
+import type { Express, IRouter, Handler } from 'express';
+import type { Environment } from 'nunjucks';
+import type { HelmetCspDirectives } from '../middleware/csp-middleware.js';
 
-/**
- * @param {Object} opts
- * @param {import('./base-service.js').BaseService} opts.service
- * @param {import('express').Router} opts.router
- * @param {import('express').Handler[]} opts.middlewares
- * @param {function(): import('nunjucks').Environment} [opts.configureNunjucks]
- * @param {import('helmet').ContentSecurityPolicyOptions['directives']} [opts.cspDirectives]
- * @returns {import('express').Express}
- */
+interface BaseAppOptions {
+	service: BaseService;
+	router: IRouter;
+	middlewares: Handler[];
+	configureNunjucks: () => Environment;
+	cspDirectives?: HelmetCspDirectives;
+}
+
 export function createBaseApp({
 	service,
 	router,
 	middlewares,
 	configureNunjucks,
 	cspDirectives = cspDirectiveDefaults
-}) {
+}: BaseAppOptions): Express {
 	// create an express app, and configure it for our usage
 	const app = express();
 
@@ -68,8 +71,7 @@ export function createBaseApp({
 	return app;
 }
 
-/** @type {import('helmet').ContentSecurityPolicyOptions['directives']} */
-const cspDirectiveDefaults = {
+const cspDirectiveDefaults: HelmetCspDirectives = {
 	scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
 	defaultSrc: ["'self'"],
 	connectSrc: ["'self'"],

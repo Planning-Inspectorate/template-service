@@ -1,14 +1,13 @@
 import assert from 'node:assert';
 import { mock } from 'node:test';
+import type { Request, Response } from 'express';
+import type { AsyncRequestHandler } from '../util/async-handler.js';
 
-/**
- *
- * @param {Function | Handler} functionToTest
- * @param {Object} mockReq
- * @param {Boolean} isMiddleWare
- * @returns {Promise<void>}
- */
-export async function assertRenders404Page(functionToTest, mockReq, isMiddleWare) {
+export async function assertRenders404Page(
+	functionToTest: AsyncRequestHandler,
+	mockReq: Request,
+	isMiddleWare: boolean
+) {
 	const mockRes = {
 		locals: {},
 		status: mock.fn(),
@@ -17,9 +16,11 @@ export async function assertRenders404Page(functionToTest, mockReq, isMiddleWare
 
 	if (isMiddleWare) {
 		const next = mock.fn();
+		// @ts-ignore
 		await assert.doesNotReject(() => functionToTest(mockReq, mockRes, next));
 		assert.strictEqual(next.mock.callCount(), 0);
 	} else {
+		// @ts-ignore
 		await assert.doesNotReject(() => functionToTest(mockReq, mockRes));
 	}
 	assert.strictEqual(mockRes.status.mock.callCount(), 1);

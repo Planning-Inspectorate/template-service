@@ -11,7 +11,8 @@ export type AsyncRequestHandler<
 	LocalsObj extends Record<string, any> = Record<string, any>
 > = (
 	req: core.Request<P, ResBody, ReqBody, ReqQuery, LocalsObj>,
-	res: core.Response<ResBody, LocalsObj>
+	res: core.Response<ResBody, LocalsObj>,
+	next?: core.NextFunction
 ) => Promise<void>;
 
 export function asyncHandler<A, B, C, D, E extends Record<string, any>>(

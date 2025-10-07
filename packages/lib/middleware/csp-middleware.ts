@@ -4,9 +4,12 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Handler } from 'express';
 
 // not directly exported from helmet types??
-type ContentSecurityPolicyDirectiveValueFunction = (req: IncomingMessage, res: ServerResponse) => string;
+type LocalsResponse = ServerResponse & {
+	locals?: any;
+};
+type ContentSecurityPolicyDirectiveValueFunction = (req: IncomingMessage, res: LocalsResponse) => string;
 type ContentSecurityPolicyDirectiveValue = string | ContentSecurityPolicyDirectiveValueFunction;
-type HelmetCspDirectives = Record<string, null | Iterable<ContentSecurityPolicyDirectiveValue>>;
+export type HelmetCspDirectives = Record<string, null | Iterable<ContentSecurityPolicyDirectiveValue>>;
 
 export function initContentSecurityPolicyMiddlewares(directives: HelmetCspDirectives): Handler[] {
 	const middlewares: Handler[] = [];

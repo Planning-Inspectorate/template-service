@@ -143,7 +143,8 @@ export class TestServer {
 		if (!this.rememberCookies) return;
 		if (!headers) return;
 		if (this.#cookies) {
-			headers['Cookie'] = this.#cookies;
+			// @ts-ignore this is OK, we only use the header set
+			headers.Cookie = this.#cookies;
 		}
 	}
 

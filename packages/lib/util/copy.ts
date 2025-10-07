@@ -3,12 +3,8 @@ import path from 'node:path';
 
 /**
  * Copy a folder to a new location, and create that new directory if it doesn't exist
- *
- * @param {string} from
- * @param {string} to
- * @returns {Promise<void>}
  */
-export async function copyFolder(from, to) {
+export async function copyFolder(from: string, to: string): Promise<void> {
 	// make the destination directory, and any parent directories
 	await fs.mkdir(to, { recursive: true });
 	// read the directory to be copied
@@ -24,12 +20,8 @@ export async function copyFolder(from, to) {
 
 /**
  * Copy a file or folder, recursively
- *
- * @param {string} from
- * @param {string} to
- * @returns {Promise<void>}
  */
-async function copyFileOrFolder(from, to) {
+async function copyFileOrFolder(from: string, to: string): Promise<void> {
 	// check if this is a file or folder
 	const stat = await fs.lstat(from);
 	if (stat.isFile()) {
@@ -43,12 +35,8 @@ async function copyFileOrFolder(from, to) {
 
 /**
  * Copy a file, ensuring the destination exists
- *
- * @param {string} from
- * @param {string} to
- * @returns {Promise<void>}
  */
-export async function copyFile(from, to) {
+export async function copyFile(from: string, to: string): Promise<void> {
 	const destDir = path.dirname(to);
 	// make the destination directory, and any parent directories
 	await fs.mkdir(destDir, { recursive: true });

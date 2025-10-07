@@ -1,25 +1,27 @@
 import { Prisma } from '@pins/service-name-database/src/client/index.js';
+import type { Logger } from 'pino';
 
 /**
- * @param {string} [id]
- * @returns {undefined|{id: string}}
+ * Where clause cannot include an undefined ID, so either return a valid where clause or none
  */
-export function optionalWhere(id) {
+export function optionalWhere(id: string): undefined | { id: string } {
 	if (id) {
 		return { id };
 	}
 	return undefined;
 }
 
+interface WrapPrismaErrorOptions {
+	error: Error;
+	logger: Logger;
+	message: string;
+	logParams: Record<string, any>;
+}
+
 /**
  * Wrap common Prisma errors so they aren't shown to the user
- * @param {Object} opts
- * @param {Error|*} opts.error
- * @param {import('pino').Logger} opts.logger
- * @param {string} opts.message
- * @param {Object<string, *>} opts.logParams
  */
-export function wrapPrismaError({ error, logger, message, logParams }) {
+export function wrapPrismaError({ error, logger, message, logParams }: WrapPrismaErrorOptions) {
 	// don't show Prisma errors to the user
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
 		logger.error({ error, ...logParams }, `error ${message}`);

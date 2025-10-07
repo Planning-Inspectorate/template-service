@@ -13,7 +13,7 @@ export function buildHomePage(service: App1Service): AsyncRequestHandler {
 			await db.$queryRaw`SELECT 1`;
 			connected = true;
 		} catch (error) {
-			logger.error('Database connection failed', error);
+			logger.error({ error }, 'Database connection failed');
 		}
 
 		req.session.visits = (req.session.visits || 0) + 1;

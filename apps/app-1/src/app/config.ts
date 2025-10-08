@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 import type { BaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
 
-export interface Config extends BaseConfig {}
+export type Config = BaseConfig;
 
 // cache the config
 let config: Config | undefined;

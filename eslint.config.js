@@ -1,21 +1,23 @@
-import js from '@eslint/js';
+import eslint from '@eslint/js';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-export default [
+export default defineConfig([
+	eslint.configs.recommended,
+	tseslint.configs.recommended,
+	globalIgnores([
+		'.husky',
+		'dist/**',
+		'node_modules/**',
+		'**/*.test.ts',
+		'**/.static/**',
+		'packages/database/src/client/**'
+	]),
+	eslintConfigPrettier,
 	{
-		...js.configs.recommended,
-		ignores: ['packages/database/src/client/**', '**/.static/**']
-	},
-	{
-		ignores: ['dist/**', 'node_modules/**', '**/*.min*.js', '**/static/scripts/app.js'],
-		languageOptions: {
-			ecmaVersion: 2025,
-			sourceType: 'module',
-			globals: {
-				...globals.node
-			}
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off'
 		}
-	},
-	eslintConfigPrettier
-];
+	}
+]);

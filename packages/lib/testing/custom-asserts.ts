@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { mock } from 'node:test';
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 import type { AsyncRequestHandler } from '../util/async-handler.js';
 
 export async function assertRenders404Page(
@@ -16,11 +16,11 @@ export async function assertRenders404Page(
 
 	if (isMiddleWare) {
 		const next = mock.fn();
-		// @ts-ignore
+		// @ts-expect-error - due to mock res
 		await assert.doesNotReject(() => functionToTest(mockReq, mockRes, next));
 		assert.strictEqual(next.mock.callCount(), 0);
 	} else {
-		// @ts-ignore
+		// @ts-expect-error - due to mock res
 		await assert.doesNotReject(() => functionToTest(mockReq, mockRes));
 	}
 	assert.strictEqual(mockRes.status.mock.callCount(), 1);

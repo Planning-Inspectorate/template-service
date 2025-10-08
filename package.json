@@ -62,7 +62,8 @@
     "prettier-plugin-prisma": "^5.0.0",
     "prisma": "^6.16.1",
     "sass": "^1.93.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.46.0"
   },
   "lint-staged": {
     "*.js": [

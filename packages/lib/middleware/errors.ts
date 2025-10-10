@@ -1,4 +1,4 @@
-import { Prisma } from '@pins/service-name-database/src/client/index.js';
+import { Prisma } from '@pins/service-name-database/src/client/client.ts';
 import type { Logger } from 'pino';
 import type { ErrorRequestHandler, Request, Response } from 'express';
 

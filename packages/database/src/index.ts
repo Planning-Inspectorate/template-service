@@ -1,9 +1,11 @@
-import { PrismaClient } from '@pins/service-name-database/src/client/index.js';
+import { PrismaClient } from '@pins/service-name-database/src/client/client.ts';
+import { PrismaMssql } from '@prisma/adapter-mssql';
 import type { Prisma } from '@pins/service-name-database/src/client/client.d.ts';
 import type { Logger } from 'pino';
+import type { DatabaseConfig } from '@pins/service-name-lib/app/config-types.js';
 
 export function initDatabaseClient(
-	config: { database: Prisma.PrismaClientOptions; NODE_ENV: string },
+	config: { database: DatabaseConfig; NODE_ENV: string },
 	logger: Logger
 ): PrismaClient {
 	let prismaLogger: Logger | undefined;
@@ -12,12 +14,17 @@ export function initDatabaseClient(
 		prismaLogger = logger;
 	}
 
-	return newDatabaseClient(config.database, prismaLogger);
+	if (!config.database.connectionString) {
+		throw new Error('database connectionString is required');
+	}
+
+	return newDatabaseClient(config.database.connectionString, prismaLogger);
 }
 
-export function newDatabaseClient(prismaConfig: Prisma.PrismaClientOptions, logger?: Logger): PrismaClient {
+export function newDatabaseClient(connectionString: string, logger?: Logger): PrismaClient {
+	const adapter = new PrismaMssql(connectionString);
 	const prisma = new PrismaClient({
-		...prismaConfig,
+		adapter,
 		log: [
 			{
 				emit: 'event',

@@ -13,6 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@prisma/adapter-mssql": "*",
     "@prisma/client": "*"
   },
   "devDependencies": {

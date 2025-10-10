@@ -1,10 +1,12 @@
-import { Prisma } from '@pins/service-name-database/src/client';
+export interface DatabaseConfig {
+	connectionString?: string;
+}
 
-interface BaseConfig {
+export interface BaseConfig {
 	cacheControl: {
 		maxAge: string;
 	};
-	database: Prisma.PrismaClientOptions;
+	database: DatabaseConfig;
 	gitSha?: string;
 	httpPort: number;
 	logLevel: string;

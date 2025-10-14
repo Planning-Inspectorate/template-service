@@ -9,6 +9,9 @@
     "apps/*",
     "packages/*"
   ],
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "scripts": {
     "check-types": "npx tsc",
     "commitlint": "commitlint --from=$(git cherry origin/main | head -n 1 | cut -c 3-)",

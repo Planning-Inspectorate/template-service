@@ -17,9 +17,8 @@
     "dotenv": "*"
   },
   "imports": {
-    "#pins/service-name-lib": "packages/service-name-lib",
-    "#pins/service-name-lib/*": "packages/service-name-lib/*",
-    "#pins/service-name-database": "packages/service-name-database",
-    "#pins/service-name-database/*": "packages/service-name-database/*"
+    "#pins/service-name-lib/*": "./src/packages/service-name-lib/*",
+    "#pins/service-name-database": "./src/packages/service-name-database/src/index.ts",
+    "#pins/service-name-database/*": "./src/packages/service-name-database/*"
   }
 }

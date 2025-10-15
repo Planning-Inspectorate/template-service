@@ -1,0 +1,25 @@
+{
+  "name": "service-name-function",
+  "version": "1.0.0",
+  "description": "Function app for handling integrations",
+  "main": "src/functions/*.ts",
+  "type": "module",
+  "scripts": {
+    "start": "func start",
+    "prepare-package": "node src/package.ts",
+    "test": "node --test"
+  },
+  "private": true,
+  "dependencies": {
+    "@azure/functions": "*",
+    "@pins/service-name-database": "^0.0.0",
+    "@pins/service-name-lib": "^0.0.0",
+    "dotenv": "*"
+  },
+  "imports": {
+    "#pins/service-name-lib": "packages/service-name-lib",
+    "#pins/service-name-lib/*": "packages/service-name-lib/*",
+    "#pins/service-name-database": "packages/service-name-database",
+    "#pins/service-name-database/*": "packages/service-name-database/*"
+  }
+}

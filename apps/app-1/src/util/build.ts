@@ -12,7 +12,8 @@ async function run(): Promise<void> {
 	const govUkRoot = path.resolve(require.resolve('govuk-frontend'), '../../../../..');
 
 	const config = loadBuildConfig();
-	await runBuild({ staticDir: config.staticDir, srcDir: config.srcDir, govUkRoot });
+	const localsFile = path.join(config.srcDir, 'util', 'config-middleware.ts');
+	await runBuild({ staticDir: config.staticDir, srcDir: config.srcDir, govUkRoot, localsFile });
 }
 
 // run the build, and write any errors to console

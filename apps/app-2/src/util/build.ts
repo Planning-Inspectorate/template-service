@@ -14,7 +14,14 @@ async function run(): Promise<void> {
 	const accessibleAutocompleteRoot = path.resolve(require.resolve('accessible-autocomplete'), '..');
 
 	const config = loadBuildConfig();
-	await runBuild({ staticDir: config.staticDir, srcDir: config.srcDir, govUkRoot, accessibleAutocompleteRoot });
+	const localsFile = path.join(config.srcDir, 'util', 'config-middleware.ts');
+	await runBuild({
+		staticDir: config.staticDir,
+		srcDir: config.srcDir,
+		govUkRoot,
+		accessibleAutocompleteRoot,
+		localsFile
+	});
 }
 
 // run the build, and write any errors to console

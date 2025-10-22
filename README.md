@@ -12,7 +12,22 @@ A template repository for creating new services. This repository includes a basi
 Generally this repo can be copied/cloned for a new project, and a few find+replace runs will get things started:
 
 * Replace 'service-name' with the new service name in the codebase.
-* Replace `app-1` with the app name, e.g. `api`
-* Replace `app-2` with the app name, e.g. `web`
+* If required, replace `portal` with another app name, or remove it if not required
+* If required, replace `manage` with another app name, or remove it if not required
+* If not required, then remove the `apps/function` code
 
-App 1 is given in the PINS/Public style, App 2 is given in the back office/internal style, with Entra Auth.
+'Portal' app is given in the PINS/Public style. 'Manage' app is given in the back office/internal style, with Entra Auth.
+
+## Getting started
+
+* install latest LTS Node
+* install Docker
+* `npm i`
+* `docker compose up` (to start a database)
+* copy `packages/database/.env.example` to `.env`
+* copy `apps/manage/.env.example` to `.env`
+* copy `apps/portal/.env.example` to `.env`
+* Get the `AUTH_*` env vars from a dev and add to `apps/manage/.env` (or set `AUTH_DISABLED=false`)
+* run `npm run db-migrate-dev` to setup the database
+* run `apps/manage>npm run dev` to start the manage app
+* run `apps/portal>npm run dev` to start the portal app

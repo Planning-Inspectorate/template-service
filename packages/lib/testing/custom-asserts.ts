@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { mock } from 'node:test';
 import type { Request } from 'express';
-import type { AsyncRequestHandler } from '../util/async-handler.js';
+import type { AsyncRequestHandler } from '../util/async-handler.ts';
 
 export async function assertRenders404Page(
 	functionToTest: AsyncRequestHandler,

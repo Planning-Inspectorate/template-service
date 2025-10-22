@@ -7,7 +7,7 @@ import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '../middlewa
 import type { BaseService } from './base-service.ts';
 import type { Express, IRouter, Handler } from 'express';
 import type { Environment } from 'nunjucks';
-import type { HelmetCspDirectives } from '../middleware/csp-middleware.js';
+import type { HelmetCspDirectives } from '../middleware/csp-middleware.ts';
 
 interface BaseAppOptions {
 	service: BaseService;

@@ -1,5 +1,5 @@
 import session from 'express-session';
-import type { RedisClient } from '../redis/redis-client.js';
+import type { RedisClient } from '../redis/redis-client.ts';
 import type { RequestHandler, Request } from 'express';
 
 const DEFAULT_SESSION_FIELD = 'cases';

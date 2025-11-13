@@ -1,9 +1,9 @@
 import { defineConfig } from 'prisma/config';
 import path from 'node:path';
-import dotenv from 'dotenv';
+import { loadEnvFile } from 'node:process';
 
 // load configuration from .env file into process.env
-dotenv.config({ quiet: true });
+loadEnvFile();
 
 export default defineConfig({
 	schema: path.join('src', 'schema.prisma'),

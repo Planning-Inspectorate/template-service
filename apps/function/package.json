@@ -13,8 +13,7 @@
   "dependencies": {
     "@azure/functions": "*",
     "@pins/service-name-database": "^0.0.0",
-    "@pins/service-name-lib": "^0.0.0",
-    "dotenv": "*"
+    "@pins/service-name-lib": "^0.0.0"
   },
   "imports": {
     "#pins/service-name-lib/*": "./src/packages/service-name-lib/*",

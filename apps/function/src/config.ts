@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
 import type { DatabaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
+import { loadEnvFile } from 'node:process';
 
 export interface Config {
 	example: {
@@ -10,7 +10,8 @@ export interface Config {
 
 export function loadConfig(): Config {
 	// load configuration from .env file into process.env
-	dotenv.config();
+	// prettier-ignore
+	try {loadEnvFile()} catch {/* ignore errors*/}
 
 	// get values from the environment
 	const { EXAMPLE_SCHEDULE, SQL_CONNECTION_STRING } = process.env;

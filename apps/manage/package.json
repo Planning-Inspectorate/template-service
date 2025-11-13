@@ -19,7 +19,6 @@
     "accessible-autocomplete": "*",
     "body-parser": "*",
     "connect-redis": "*",
-    "dotenv": "*",
     "express": "*",
     "express-session": "*",
     "express-validator": "*",

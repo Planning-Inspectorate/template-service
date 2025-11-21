@@ -31,3 +31,8 @@ Generally this repo can be copied/cloned for a new project, and a few find+repla
 * run `npm run db-migrate-dev` to setup the database
 * run `apps/manage>npm run dev` to start the manage app
 * run `apps/portal>npm run dev` to start the portal app
+
+## WebStorm Run Configurations
+
+Run configurations are included for most of the npm scripts. Node and npm must be configured for the project for them to work.
+Go to Settings > Languages and Frameworks > Node.js and set the Node interpreter and package manager.

@@ -67,7 +67,7 @@
     "prisma": "^7.0.1",
     "sass": "^1.93.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4"
+    "typescript-eslint": "^8.47.0"
   },
   "lint-staged": {
     "*.{js,ts}": [

@@ -8,6 +8,7 @@ export class TestServer {
 	// Private cookie jar for storing cookies between requests
 	readonly #cookieJar: Record<string, string> = {};
 	readonly requestListener: http.RequestListener;
+	readonly #timeoutMs: number;
 	rememberCookies: boolean;
 	server: http.Server | null;
 	port: number | null;
@@ -16,12 +17,14 @@ export class TestServer {
 	 * @param requestListener
 	 * @param [options]
 	 * @param [options.rememberCookies] - If true, cookies are stored and sent with each request
+	 * @param [options.timeoutMs] - timeout to use for fetch requests
 	 */
-	constructor(requestListener: http.RequestListener, options: { rememberCookies?: boolean } = {}) {
+	constructor(requestListener: http.RequestListener, options: { rememberCookies?: boolean; timeoutMs?: number } = {}) {
 		this.requestListener = requestListener;
 		this.server = null;
 		this.port = null;
 		this.rememberCookies = Boolean(options.rememberCookies);
+		this.#timeoutMs = options.timeoutMs || 5000;
 	}
 
 	/**
@@ -71,11 +74,7 @@ export class TestServer {
 		}
 		const fetchOptions: RequestInit = { headers: {}, ...DEFAULT_OPTIONS, ...options, method: 'GET' };
 		this.#addCookies(fetchOptions.headers);
-		const response = await fetch(`http://localhost:${this.port}${path}`, fetchOptions);
-		if (this.rememberCookies) {
-			this.#updateCookies(response);
-		}
-		return response;
+		return this.#fetch(path, fetchOptions);
 	}
 
 	/**
@@ -132,11 +131,31 @@ export class TestServer {
 			body: JSON.stringify(body)
 		};
 		this.#addCookies(fetchOptions.headers);
-		const response = await fetch(`http://localhost:${this.port}${path}`, fetchOptions);
-		if (this.rememberCookies) {
-			this.#updateCookies(response);
+		return this.#fetch(path, fetchOptions);
+	}
+
+	/**
+	 * Perform a fetch request with a timeout
+	 */
+	async #fetch(path: string, options: RequestInit) {
+		// set up an abort controller to cancel requests after timeout
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), this.#timeoutMs);
+		options.signal = controller.signal;
+		try {
+			const response = await fetch(`http://localhost:${this.port}${path}`, options);
+			if (this.rememberCookies) {
+				this.#updateCookies(response);
+			}
+			return response;
+		} catch (error) {
+			if (error instanceof Error && error.name === 'AbortError') {
+				throw new Error(`Request to ${path} timed out after ${this.#timeoutMs}ms`);
+			}
+			throw error;
+		} finally {
+			clearTimeout(timeoutId);
 		}
-		return response;
 	}
 
 	#addCookies(headers: HeadersInit | undefined) {

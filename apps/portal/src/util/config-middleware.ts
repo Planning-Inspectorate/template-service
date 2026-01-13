@@ -21,7 +21,7 @@ export function addLocalsConfiguration(): Handler {
 		res.locals.config = {
 			styleFile: 'style-f6713a09.css',
 			cspNonce: res.locals.cspNonce,
-			headerTitle: 'A New Service',
+			headerTitle: 'A template service',
 			footerLinks: [
 				{
 					text: 'Terms and conditions',

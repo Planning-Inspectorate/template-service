@@ -6,8 +6,8 @@ import type { Handler } from 'express';
 export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
 		res.locals.config = {
-			styleFile: 'style-2c953252.css',
-			headerTitle: 'App 2 Service'
+			styleFile: 'style-e8559774.css',
+			headerTitle: 'Manage template'
 		};
 		next();
 	};

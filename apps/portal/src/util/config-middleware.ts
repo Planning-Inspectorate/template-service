@@ -13,15 +13,16 @@ export function addLocalsConfiguration(): Handler {
 				href: '/'
 			},
 			{
-				text: 'Another Page',
+				text: 'Another page',
 				href: '/another-page'
 			}
 		];
 
 		res.locals.config = {
-			styleFile: 'style-f6713a09.css',
+			styleFile: 'style-771162e0.css',
 			cspNonce: res.locals.cspNonce,
 			headerTitle: 'A template service',
+			inBeta: false,
 			footerLinks: [
 				{
 					text: 'Terms and conditions',

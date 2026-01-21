@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { fileURLToPath } from 'url';
 import type { BaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
 import { loadEnvFile } from 'node:process';
 
@@ -146,10 +145,8 @@ export interface BuildConfig {
  * Config required for the build script
  */
 export function loadBuildConfig(): BuildConfig {
-	// get the file path for the directory this file is in
-	const dirname = path.dirname(fileURLToPath(import.meta.url));
 	// get the file path for the src directory
-	const srcDir = path.join(dirname, '..');
+	const srcDir = path.join(import.meta.dirname, '..');
 	// get the file path for the .static directory
 	const staticDir = path.join(srcDir, '.static');
 

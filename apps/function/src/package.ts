@@ -1,9 +1,5 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 interface Replacement {
 	replace: string;
@@ -21,7 +17,7 @@ interface Replacement {
  * and also runs this script to replace imports.
  */
 async function replaceLocalPackages() {
-	const files = await getFiles(path.join(__dirname));
+	const files = await getFiles(import.meta.dirname);
 
 	const srcFiles = files.filter(isSourceFile);
 	for (const srcFile of srcFiles) {
@@ -52,7 +48,7 @@ async function replaceInFile(file: string, replacements: Replacement[]) {
  * @param f
  */
 function isSourceFile(f: string) {
-	if (f === __filename) {
+	if (f === import.meta.filename) {
 		return false;
 	}
 	if (f.endsWith('.test.js') || f.endsWith('.test.ts')) {

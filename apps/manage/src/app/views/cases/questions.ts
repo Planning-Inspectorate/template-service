@@ -14,6 +14,30 @@ const questionProps: Record<string, QuestionProps> = {
 		fieldName: 'reference',
 		url: 'case-reference',
 		validators: [new RequiredValidator('Enter the case reference')]
+	},
+	description: {
+		type: COMPONENT_TYPES.TEXT_ENTRY,
+		question: 'What is the description of the case?',
+		title: 'Description',
+		fieldName: 'description',
+		url: 'description',
+		validators: [new RequiredValidator('Enter the case description')]
+	},
+	howManyApplicants: {
+		type: COMPONENT_TYPES.NUMBER,
+		question: 'How many applicants are there?',
+		title: 'Applicant Count',
+		fieldName: 'applicantCount',
+		url: 'applicant-count',
+		validators: []
+	},
+	submissionDate: {
+		type: COMPONENT_TYPES.DATE,
+		question: 'When was the case submitted?',
+		title: 'Submission Date',
+		fieldName: 'submissionDate',
+		url: 'submission-date',
+		validators: []
 	}
 };
 

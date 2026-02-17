@@ -6,6 +6,7 @@ import { createErrorRoutes } from './views/static/error/index.ts';
 import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
 import type { ManageService } from '#service';
 import type { IRouter } from 'express';
+import { createRoutes } from './views/cases/index.ts';
 
 /**
  * Main app router
@@ -40,6 +41,7 @@ export function buildRouter(service: ManageService): IRouter {
 
 	router.get('/', (req, res) => res.redirect('/items'));
 	router.use('/items', itemsRoutes);
+	router.use('/case', createRoutes(service));
 	router.use('/error', createErrorRoutes(service));
 
 	return router;

@@ -7,6 +7,7 @@ import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.
 import type { ManageService } from '#service';
 import type { IRouter } from 'express';
 import { createRoutes } from './views/cases/index.ts';
+import { createRoutes as createListRoutes } from './views/cases/list/index.ts';
 
 /**
  * Main app router
@@ -39,8 +40,9 @@ export function buildRouter(service: ManageService): IRouter {
 		service.logger.warn('auth disabled; auth routes and guards skipped');
 	}
 
-	router.get('/', (req, res) => res.redirect('/items'));
+	router.get('/', (req, res) => res.redirect('/cases'));
 	router.use('/items', itemsRoutes);
+	router.use('/cases', createListRoutes(service));
 	router.use('/case', createRoutes(service));
 	router.use('/error', createErrorRoutes(service));
 

@@ -1,6 +1,14 @@
 import type { ManageService } from '#service';
 import { type IRouter, Router as createRouter } from 'express';
-import { buildGetJourney, buildGetJourneyResponseFromSession, question } from '@planning-inspectorate/dynamic-forms';
+import {
+	buildGetJourney,
+	buildGetJourneyResponseFromSession,
+	buildSave,
+	question,
+	saveDataToSession,
+	validate,
+	validationErrorHandler
+} from '@planning-inspectorate/dynamic-forms';
 import { createJourney, JOURNEY_ID } from './journey.ts';
 import { questions } from './questions.ts';
 
@@ -13,6 +21,14 @@ export function createRoutes(service: ManageService): IRouter {
 	const getJourney = buildGetJourney((req, journeyResponse) => createJourney(req, journeyResponse, questions));
 
 	router.get('/:section/:question', getJourneyResponse, getJourney, question);
+	router.post(
+		'/:section/:question',
+		getJourneyResponse,
+		getJourney,
+		validate,
+		validationErrorHandler,
+		buildSave(saveDataToSession)
+	);
 
 	return router;
 }

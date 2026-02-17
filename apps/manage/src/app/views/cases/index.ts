@@ -13,6 +13,7 @@ import {
 import { createJourney, JOURNEY_ID } from './journey.ts';
 import { questions } from './questions.ts';
 import { buildSaveController } from './save.ts';
+import { createRoutes as createDetailsRoutes } from './view/index.ts';
 
 export function createRoutes(service: ManageService): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -20,6 +21,8 @@ export function createRoutes(service: ManageService): IRouter {
 	// read answers from the session
 	const getJourneyResponse = buildGetJourneyResponseFromSession(JOURNEY_ID);
 	const getJourney = buildGetJourney((req, journeyResponse) => createJourney(req, journeyResponse, questions));
+
+	router.use('/view/:id', createDetailsRoutes(service));
 
 	router.get('/:section/:question', getJourneyResponse, getJourney, question);
 	router.post(

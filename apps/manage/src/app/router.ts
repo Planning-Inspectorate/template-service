@@ -6,6 +6,7 @@ import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { createRoutes as createItemRoutes } from './views/items/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
+import { createRoutes } from './views/cases/index.ts';
 
 /**
  * Main app router
@@ -40,6 +41,7 @@ export function buildRouter(service: ManageService): IRouter {
 
 	router.get('/', (req, res) => res.redirect('/items'));
 	router.use('/items', itemsRoutes);
+	router.use('/case', createRoutes(service));
 	router.use('/error', createErrorRoutes(service));
 
 	return router;

@@ -19,6 +19,7 @@ export function createRoutes(service: ManageService): IRouter {
 	// read 'answers'/data from the database
 	const getJourneyResponse = buildGetJourneyMiddleware(service);
 	const getJourney = buildGetJourney((req, journeyResponse) => createJourney(req, journeyResponse, questions));
+	const saveEdits = buildSave(buildSaveFn(service), true);
 
 	router.get('/', getJourneyResponse, getJourney, asyncHandler(buildList()));
 
@@ -30,7 +31,7 @@ export function createRoutes(service: ManageService): IRouter {
 		getJourney,
 		validate,
 		validationErrorHandler,
-		buildSave(buildSaveFn(service), true)
+		asyncHandler(saveEdits)
 	);
 
 	return router;

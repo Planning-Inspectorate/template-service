@@ -3,6 +3,7 @@ import { type IRouter, Router as createRouter } from 'express';
 import {
 	buildGetJourney,
 	buildGetJourneyResponseFromSession,
+	buildList,
 	buildSave,
 	question,
 	saveDataToSession,
@@ -29,6 +30,8 @@ export function createRoutes(service: ManageService): IRouter {
 		validationErrorHandler,
 		buildSave(saveDataToSession)
 	);
+
+	router.get('/check-your-answers', getJourneyResponse, getJourney, buildList());
 
 	return router;
 }

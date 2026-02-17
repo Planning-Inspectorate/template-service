@@ -12,8 +12,8 @@ import {
 } from '@planning-inspectorate/dynamic-forms';
 import { createJourney, JOURNEY_ID } from './journey.ts';
 import { questions } from './questions.ts';
+import { buildSaveController } from './save.ts';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createRoutes(service: ManageService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
@@ -32,6 +32,7 @@ export function createRoutes(service: ManageService): IRouter {
 	);
 
 	router.get('/check-your-answers', getJourneyResponse, getJourney, buildList());
+	router.post('/check-your-answers', getJourneyResponse, getJourney, buildSaveController(service));
 
 	return router;
 }

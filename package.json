@@ -19,7 +19,7 @@
     "db-migrate-prod": "npm run migrate-prod --workspace @pins/service-name-database",
     "db-generate": "npm run generate --workspace @pins/service-name-database",
     "db-seed": "npm run seed --workspace @pins/service-name-database",
-    "db-seed-prod": "npm run seed:prod --workspace @pins/service-name-database",
+    "db-seed-prod": "npm run seed-prod --workspace @pins/service-name-database",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "lint": "npx eslint .",

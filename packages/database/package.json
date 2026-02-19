@@ -9,7 +9,8 @@
     "migrate-dev": "npx prisma migrate dev",
     "migrate-prod": "npx prisma migrate deploy",
     "generate": "npx prisma generate",
-    "seed": "npx prisma db seed"
+    "seed": "npx prisma db seed",
+    "seed-prod": "npm run generate && node src/seed/seed-prod.ts"
   },
   "license": "MIT",
   "dependencies": {

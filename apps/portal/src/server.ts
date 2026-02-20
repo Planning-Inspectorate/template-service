@@ -1,6 +1,6 @@
+import { PortalService } from '#service';
 import { createApp } from './app/app.ts';
 import { loadConfig } from './app/config.ts';
-import { PortalService } from '#service';
 
 const config = loadConfig();
 const service = new PortalService(config);

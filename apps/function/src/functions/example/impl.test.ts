@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { describe, test, mock } from 'node:test';
-import { buildExampleFunction } from './impl.ts';
 import assert from 'node:assert';
+import { describe, mock, test } from 'node:test';
+import { buildExampleFunction } from './impl.ts';
 
 describe('example-function-impl', () => {
 	const newService = () => {

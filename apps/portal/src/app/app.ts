@@ -1,9 +1,9 @@
-import { buildRouter } from './router.ts';
-import { configureNunjucks } from './nunjucks.ts';
+import type { PortalService } from '#service';
 import { addLocalsConfiguration } from '#util/config-middleware.ts';
 import { createBaseApp } from '@pins/service-name-lib/app/app.ts';
 import type { Express } from 'express';
-import type { PortalService } from '#service';
+import { configureNunjucks } from './nunjucks.ts';
+import { buildRouter } from './router.ts';
 
 /**
  * @param service

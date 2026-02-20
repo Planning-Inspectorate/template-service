@@ -1,5 +1,5 @@
-import type { FunctionService } from '../../service.ts';
 import type { TimerHandler } from '@azure/functions';
+import type { FunctionService } from '../../service.ts';
 
 /**
  * An example scheduled function implementation

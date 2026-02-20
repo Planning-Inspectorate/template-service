@@ -1,8 +1,8 @@
+import type { PortalService } from '#service';
+import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { buildHomePage } from './controller.ts';
-import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
-import type { PortalService } from '#service';
-import type { IRouter } from 'express';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });

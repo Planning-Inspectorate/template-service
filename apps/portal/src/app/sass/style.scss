@@ -7,6 +7,7 @@
 );
 @use './components/pins-table.scss';
 @use 'node_modules/@pins/service-name-lib/ui/header/pins-header';
+@use 'node_modules/@pins/service-name-lib/ui/footer/pins-footer';
 
 .show-line-breaks {
 	white-space: pre;

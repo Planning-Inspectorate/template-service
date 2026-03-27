@@ -19,7 +19,7 @@ export function addLocalsConfiguration(): Handler {
 		];
 
 		res.locals.config = {
-			styleFile: 'style-70243a08.css',
+			styleFile: 'style-2aa0fe0a.css',
 			cspNonce: res.locals.cspNonce,
 			headerTitle: 'A template service',
 			inBeta: false,

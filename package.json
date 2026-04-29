@@ -28,7 +28,7 @@
     "test-coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@azure/functions": "^4.12.0",
+    "@azure/functions": "^4.14.0",
     "@azure/identity": "^4.13.1",
     "@azure/msal-node": "^5.1.2",
     "@prisma/adapter-mssql": "^7.5.0",

@@ -4,13 +4,16 @@
             <div class="pins-footer-container govuk-width-container">
                 <div class="govuk-footer__meta">
                     <div class="govuk-footer__meta-item">
-                        <ul class="govuk-footer__inline-list">
-                            {% for footerLink in footerLinks %}
-                                <li class="govuk-footer__inline-list-item">
-                                    <a class="govuk-footer__link" target="_blank" href="{{footerLink.link}}">{{footerLink.text}}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        {% if footerLinks | length %}
+                            <h2 class="govuk-visually-hidden">Support links</h2>
+                            <ul class="govuk-footer__inline-list">
+                                {% for footerLink in footerLinks %}
+                                    <li class="govuk-footer__inline-list-item">
+                                        <a class="govuk-footer__link" target="_blank" href="{{footerLink.link}}">{{footerLink.text}}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
                     <div class="govuk-footer__meta-item">
                         <span class="govuk-footer__copyright">© Planning Inspectorate</span>

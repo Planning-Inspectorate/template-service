@@ -6,7 +6,7 @@ import type { HelmetCspDirectives } from '../middleware/csp-middleware.ts';
 import { initContentSecurityPolicyMiddlewares } from '../middleware/csp-middleware.ts';
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '../middleware/errors.ts';
 import { buildLogRequestsMiddleware } from '../middleware/log-requests.ts';
-import { initSessionMiddleware } from '../util/session.ts';
+import { initSessionMiddlewareWithCsrf } from '../util/session.ts';
 import type { BaseService } from './base-service.ts';
 
 interface BaseAppOptions {
@@ -35,12 +35,12 @@ export function createBaseApp({
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
 
-	const sessionMiddleware = initSessionMiddleware({
+	const sessionMiddleware = initSessionMiddlewareWithCsrf({
 		redis: service.redisClient,
 		secure: service.secureSession,
 		secret: service.sessionSecret
 	});
-	app.use(sessionMiddleware);
+	app.use(...sessionMiddleware);
 
 	app.use(...initContentSecurityPolicyMiddlewares(cspDirectives));
 

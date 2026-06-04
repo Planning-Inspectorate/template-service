@@ -71,9 +71,9 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-prisma": "^5.0.0",
     "prisma": "^7.8.0",
-    "sass": "^1.99.0",
+    "sass": "^1.100.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.4"
+    "typescript-eslint": "^8.60.0"
   },
   "lint-staged": {
     "*.{js,ts}": [

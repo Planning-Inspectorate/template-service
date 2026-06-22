@@ -12,13 +12,10 @@ updates:
     cooldown:
       default-days: 7
     groups:
-      azure:
+      deps: # all non-dev dependencies
         patterns:
-          - '@azure/*'
-      prisma: # group prisma library and client updates together
-        patterns:
-          - 'prisma'
-          - '@prisma/*'
+          - '*'
+        dependency-type: 'production'
       devDeps: # all dev dependencies
         patterns:
           - '*'

@@ -1,5 +1,6 @@
 import type { ManageService } from '#service';
 import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import type { ItemListViewModel } from './view-model.ts';
 
 export function buildListItems(service: ManageService): AsyncRequestHandler {
 	const { db, logger } = service;
@@ -9,13 +10,15 @@ export function buildListItems(service: ManageService): AsyncRequestHandler {
 		// check the DB connection is working
 		await db.$queryRaw`SELECT 1`;
 
-		return res.render('views/items/list/view.njk', {
+		const viewModel: ItemListViewModel = {
 			pageHeading: 'Some Service Name',
 			items: [
 				{ task: 'Create new service', done: true },
 				{ task: 'Implement a new feature', done: false },
 				{ task: 'Fix a bug', done: false }
 			]
-		});
+		};
+
+		return res.render('views/items/list/view.njk', viewModel);
 	};
 }

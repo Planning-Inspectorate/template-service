@@ -1,5 +1,6 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import type { HomeViewModel } from './view-model.ts';
 
 /**
  * Example home page controller
@@ -18,15 +19,13 @@ export function buildHomePage(service: PortalService): AsyncRequestHandler {
 
 		req.session.visits = (req.session.visits || 0) + 1;
 
-		const viewModel = {
+		const viewModel: HomeViewModel = {
+			pageTitle: 'This is the home page',
 			connected,
 			visitCount: req.session.visits
 		};
 
 		logger.info({ viewModel }, 'home page');
-		return res.render('views/home/view.njk', {
-			pageTitle: 'This is the home page',
-			...viewModel
-		});
+		return res.render('views/home/view.njk', viewModel);
 	};
 }

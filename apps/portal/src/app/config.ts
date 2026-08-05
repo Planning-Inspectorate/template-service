@@ -24,8 +24,8 @@ export function loadConfig(): Config {
 		GIT_SHA,
 		LOG_LEVEL,
 		PORT,
+		MANAGED_REDIS_URL,
 		NODE_ENV,
-		REDIS_CONNECTION_STRING,
 		SESSION_SECRET,
 		SQL_CONNECTION_STRING
 	} = process.env;
@@ -62,7 +62,7 @@ export function loadConfig(): Config {
 		srcDir: buildConfig.srcDir,
 		session: {
 			redisPrefix: 'portal:',
-			redis: REDIS_CONNECTION_STRING,
+			redis: MANAGED_REDIS_URL,
 			secret: SESSION_SECRET
 		},
 		// the static directory to serve assets from (images, css, etc..)

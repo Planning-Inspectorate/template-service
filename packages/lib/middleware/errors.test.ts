@@ -2,7 +2,8 @@
 import { Prisma } from '@pins/service-name-database/src/client/client.ts';
 import { strict as assert } from 'node:assert';
 import { describe, mock, test } from 'node:test';
-import { buildDefaultErrorHandlerMiddleware, notFoundHandler, wrapPrismaErrors } from './errors.ts';
+import { ClientClosedError, ClientOfflineError } from 'redis';
+import { buildDefaultErrorHandlerMiddleware, notFoundHandler, wrapPrismaErrors, wrapRedisErrors } from './errors.ts';
 
 describe('errors', () => {
 	describe('buildDefaultErrorHandlerMiddleware', () => {
@@ -90,6 +91,25 @@ describe('errors', () => {
 			assert.notStrictEqual(error, wrapped);
 			assert.strictEqual(wrapped.message.startsWith('Connection error'), true);
 			assert.strictEqual(wrapped.message.endsWith('(code: P1001)'), true);
+		});
+	});
+	describe('wrapRedisErrors', () => {
+		test('ignores non-redis errors', () => {
+			const error = new Error('Some error');
+			const wrapped = wrapRedisErrors(error);
+			assert.strictEqual(error, wrapped);
+		});
+		test('wraps client closed errors', () => {
+			const error = new ClientClosedError();
+			const wrapped = wrapRedisErrors(error);
+			assert.notStrictEqual(error, wrapped);
+			assert.strictEqual(wrapped.message, 'The service is not ready. Please try again in a moment.');
+		});
+		test('wraps client offline errors', () => {
+			const error = new ClientOfflineError();
+			const wrapped = wrapRedisErrors(error);
+			assert.notStrictEqual(error, wrapped);
+			assert.strictEqual(wrapped.message, 'The service is not ready. Please try again in a moment.');
 		});
 	});
 	describe('notFound', () => {

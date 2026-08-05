@@ -15,6 +15,27 @@ const questionProps: Record<string, QuestionProps> = {
 		url: 'case-reference',
 		validators: [new RequiredValidator('Enter the case reference')]
 	},
+	selectOne: {
+		type: COMPONENT_TYPES.RADIO,
+		question: 'What do you want?',
+		title: 'selectOne',
+		fieldName: 'selectOne',
+		url: 'select-one',
+		options: [
+			{ text: 'Option 1', value: 'option-1' },
+			{
+				text: 'Option 2',
+				value: 'option-2',
+				conditional: {
+					fieldName: 'myField1',
+					question: 'Provide more details',
+					type: 'text',
+					label: 'Details'
+				}
+			},
+			{ text: 'Option 3', value: 'option-3' }
+		]
+	},
 	description: {
 		type: COMPONENT_TYPES.TEXT_ENTRY,
 		question: 'What is the description of the case?',

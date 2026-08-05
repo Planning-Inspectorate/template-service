@@ -9,6 +9,7 @@ export function createJourney(req: Request, response: JourneyResponse, questions
 		sections: [
 			new Section('Questions', 'questions')
 				.addQuestion(questions.reference)
+				.addQuestion(questions.selectOne)
 				.addQuestion(questions.howManyApplicants)
 				.addQuestion(questions.submissionDate)
 				.withCondition(whenQuestionHasAnswer(questions.howManyApplicants, '5'))

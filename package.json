@@ -56,6 +56,7 @@
     "@commitlint/config-conventional": "^21.0.2",
     "@eslint/js": "^10.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
     "@types/node": "^26.1.2",
@@ -73,7 +74,7 @@
     "prettier-plugin-prisma": "^5.0.0",
     "prisma": "^7.8.0",
     "sass": "^1.102.0",
-    "typescript": "^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.65.0"
   },
   "lint-staged": {

@@ -4,6 +4,7 @@
 
 $pins-grey-100: govuk.govuk-colour('black', $variant: 'tint-95');
 $pins-blue-500: govuk.govuk-colour('blue');
+/* stylelint-disable color-no-hex -- allow custom PINs colours */
 $pins-green-200: #13a19b;
 $pins-mhclg-green: map.get(
 	org-colors.$govuk-colours-organisations,

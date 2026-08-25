@@ -24,7 +24,7 @@
     "format-css": "stylelint \"**/*.{css,scss}\" --fix",
     "format-prettier": "prettier --write .",
     "format-prettier-check": "prettier --check .",
-    "lint": "npm run lint:ts && npm run lint:css",
+    "lint": "npm run lint-ts && npm run lint-css",
     "lint-css": "stylelint \"**/*.{css,scss}\"",
     "lint-ts": "npx eslint .",
     "prepare": "node .husky/install.mjs",

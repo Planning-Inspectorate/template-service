@@ -13,7 +13,8 @@
   "dependencies": {
     "@azure/functions": "*",
     "@pins/service-name-database": "^0.0.0",
-    "@pins/service-name-lib": "^0.0.0"
+    "@pins/service-name-lib": "^0.0.0",
+    "@planning-inspectorate/core": "*"
   },
   "imports": {
     "#pins/service-name-lib/*": "./src/packages/service-name-lib/*",

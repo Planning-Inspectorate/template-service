@@ -1,9 +1,9 @@
 import type { ManageService } from '#service';
-import { createMonitoringRoutes } from '@pins/service-name-lib/controllers/monitoring.ts';
-import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
+import { createRoutesAndGuards as createAuthRoutesAndGuards } from '@planning-inspectorate/core/auth';
+import { createMonitoringRoutes } from '@planning-inspectorate/core/controllers';
+import { cacheNoCacheMiddleware } from '@planning-inspectorate/core/middleware';
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
-import { createRoutesAndGuards as createAuthRoutesAndGuards } from './auth/router.ts';
 import { createRoutes as createItemRoutes } from './views/items/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 

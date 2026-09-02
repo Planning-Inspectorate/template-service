@@ -1,4 +1,4 @@
-import type { DatabaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
+import type { DatabaseConfig } from '@planning-inspectorate/core/app';
 import { loadEnvFile } from 'node:process';
 
 export interface Config {

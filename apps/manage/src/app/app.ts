@@ -1,6 +1,6 @@
 import type { ManageService } from '#service';
 import { addLocalsConfiguration } from '#util/config-middleware.ts';
-import { createBaseApp } from '@pins/service-name-lib/app/app.ts';
+import { createBaseApp } from '@planning-inspectorate/core/app';
 import type { Express } from 'express';
 import { configureNunjucks } from './nunjucks.ts';
 import { buildRouter } from './router.ts';

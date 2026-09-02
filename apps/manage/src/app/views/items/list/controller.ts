@@ -1,5 +1,5 @@
 import type { ManageService } from '#service';
-import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import type { ItemListViewModel } from './view-model.ts';
 
 export function buildListItems(service: ManageService): AsyncRequestHandler {

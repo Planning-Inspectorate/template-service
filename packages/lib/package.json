@@ -9,18 +9,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@azure/identity": "*",
-    "@azure/msal-node": "*",
-    "@pins/service-name-database": "*",
-    "@redis/entraid": "*",
-    "connect-redis": "*",
-    "express-session": "*",
-    "notifications-node-client": "^8.4.0",
-    "pino": "*",
-    "pino-pretty": "*",
-    "redis": "*"
   },
-  "devDependencies": {
-    "sass": "*"
-  }
+  "devDependencies": {}
 }

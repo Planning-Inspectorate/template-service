@@ -1,6 +1,6 @@
 import type { PortalService } from '#service';
-import { createMonitoringRoutes } from '@pins/service-name-lib/controllers/monitoring.ts';
-import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
+import { createMonitoringRoutes } from '@planning-inspectorate/core/controllers';
+import { cacheNoCacheMiddleware } from '@planning-inspectorate/core/middleware';
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { createRoutes as appRoutes } from './views/home/index.ts';

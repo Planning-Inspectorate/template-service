@@ -1,4 +1,4 @@
-import type { BaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
+import type { BaseConfig } from '@planning-inspectorate/core/app';
 import path from 'node:path';
 import { loadEnvFile } from 'node:process';
 

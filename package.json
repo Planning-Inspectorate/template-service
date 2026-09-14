@@ -36,7 +36,7 @@
     "@azure/identity": "^4.13.2",
     "@azure/msal-node": "^6.0.0",
     "@planning-inspectorate/core": "^1.2.0",
-    "@planning-inspectorate/dynamic-forms": "^3.20.0",
+    "@planning-inspectorate/dynamic-forms": "^3.20.1",
     "@prisma/adapter-mssql": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@redis/entraid": "^6.2.1",

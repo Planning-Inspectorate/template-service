@@ -4,10 +4,10 @@ import { createMonitoringRoutes } from '@planning-inspectorate/core/controllers'
 import { cacheNoCacheMiddleware } from '@planning-inspectorate/core/middleware';
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
-import { createRoutes as createItemRoutes } from './views/items/index.ts';
-import { createErrorRoutes } from './views/static/error/index.ts';
 import { createRoutes } from './views/cases/index.ts';
 import { createRoutes as createListRoutes } from './views/cases/list/index.ts';
+import { createRoutes as createItemRoutes } from './views/items/index.ts';
+import { createErrorRoutes } from './views/static/error/index.ts';
 
 /**
  * Main app router

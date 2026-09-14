@@ -19,7 +19,7 @@ const questionProps = {
 	selectOne: {
 		type: COMPONENT_TYPES.RADIO,
 		question: 'What do you want?',
-		title: 'selectOne',
+		title: 'An option',
 		fieldName: 'selectOne',
 		url: 'select-one',
 		options: [
@@ -67,7 +67,8 @@ const questionProps = {
 		question: 'Add the events',
 		title: 'Events',
 		fieldName: 'events',
-		url: 'events'
+		url: 'events',
+		showAnswersInSummary: true
 	},
 	eventType: {
 		type: COMPONENT_TYPES.RADIO,
@@ -94,3 +95,59 @@ const questionProps = {
 export const questions = createQuestions(questionProps, questionClasses, {}, {});
 
 export type AllQuestions = typeof questions;
+
+export function publicEventQuestions(prefix: string) {
+	const publicEventQuestions = {
+		description: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			question: 'Please provide a short description of the event',
+			title: 'Event description',
+			fieldName: prefix + 'EventDescription',
+			url: 'event-description'
+		},
+		date: {
+			type: COMPONENT_TYPES.DATE,
+			question: 'What is the event date?',
+			title: 'Event date',
+			fieldName: prefix + 'EventDate',
+			url: 'event-date'
+		},
+		publicised: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			question: 'Has the event been publicised?',
+			title: 'Publicised?',
+			fieldName: prefix + 'Publicised',
+			url: 'publicised'
+		}
+	} satisfies Record<string, QuestionProps>;
+
+	return createQuestions(publicEventQuestions, questionClasses, {}, {});
+}
+
+export function internalEventQuestions(prefix: string) {
+	const internalEventQuestions = {
+		description: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			question: 'Please provide a short description of the event',
+			title: 'Event description',
+			fieldName: prefix + 'EventDescription',
+			url: 'event-description'
+		},
+		eventOwner: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			question: 'Who owns the event?',
+			title: 'Owner',
+			fieldName: prefix + 'Owner',
+			url: 'owner'
+		},
+		eventReason: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			question: 'What is the reason for the event?',
+			title: 'Reason',
+			fieldName: prefix + 'Reason',
+			url: 'reason'
+		}
+	} satisfies Record<string, QuestionProps>;
+
+	return createQuestions(internalEventQuestions, questionClasses, {}, {});
+}

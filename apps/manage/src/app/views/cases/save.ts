@@ -13,11 +13,13 @@ export interface CreateCaseAnswers {
 	description: string;
 	applicantCount: string;
 	submissionDate?: string;
-	events?: {
-		id?: string;
-		eventType: string;
-		eventDescription: string;
-	}[];
+	events?: EventAnswers[];
+}
+
+export interface EventAnswers {
+	id?: string;
+	eventType: string;
+	eventDescription: string;
 }
 
 /**

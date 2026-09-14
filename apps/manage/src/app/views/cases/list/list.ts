@@ -1,7 +1,7 @@
 import type { ManageService } from '#service';
-import type { RequestHandler } from 'express';
 import type { Case } from '@pins/service-name-database/src/client/client.ts';
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
+import type { RequestHandler } from 'express';
 
 export function buildListCases(service: ManageService): RequestHandler {
 	return async (req, res) => {

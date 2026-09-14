@@ -9,7 +9,7 @@ export const JOURNEY_ID = 'case-view';
 export function createJourney(req: Request, response: JourneyResponse, questions: AllQuestions) {
 	return new Journey({
 		journeyId: JOURNEY_ID,
-		sections: buildSections(questions),
+		sections: buildSections(questions, response),
 		taskListUrl: '/',
 		journeyTemplate: 'views/layouts/layout-journey.njk',
 		taskListTemplate: 'views/layouts/layout-case-details.njk',

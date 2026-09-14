@@ -1,7 +1,8 @@
-import type { RequestHandler } from 'express';
 import type { ManageService } from '#service';
-import type { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import type { CaseCreateInput } from '@pins/service-name-database/src/client/models/Case.ts';
+import type { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
+import type { RequestHandler } from 'express';
+import { EVENT_TYPES } from './events.ts';
 
 /**
  * The structure of data for the journey answers
@@ -12,6 +13,11 @@ export interface CreateCaseAnswers {
 	description: string;
 	applicantCount: string;
 	submissionDate?: string;
+	events?: {
+		id?: string;
+		eventType: string;
+		eventDescription: string;
+	}[];
 }
 
 /**
@@ -24,7 +30,7 @@ export function buildSaveController(service: ManageService): RequestHandler {
 			throw new Error('journey response required');
 		}
 		const journeyResponse = res.locals.journeyResponse as JourneyResponse;
-		const answers = journeyResponse.answers as CreateCaseAnswers;
+		const answers = journeyResponse.answers as unknown as CreateCaseAnswers;
 		if (typeof answers !== 'object') {
 			throw new Error('answers should be an object');
 		}
@@ -40,10 +46,39 @@ export function buildSaveController(service: ManageService): RequestHandler {
 }
 
 export function mapToDatabase(answers: CreateCaseAnswers): CaseCreateInput {
-	return {
+	const createInput: CaseCreateInput = {
 		reference: answers.reference,
 		description: answers.description,
 		applicantCount: Number(answers.applicantCount),
 		submissionDate: answers.submissionDate
 	};
+	const internalEvents = answers.events
+		?.filter((e) => e.eventType === EVENT_TYPES.INTERNAL)
+		.map((e) => {
+			return {
+				description: e.eventDescription
+			};
+		});
+	const publicEvents = answers.events
+		?.filter((e) => e.eventType === EVENT_TYPES.PUBLIC)
+		.map((e) => {
+			return {
+				description: e.eventDescription
+			};
+		});
+	if (internalEvents) {
+		createInput.InternalEvents = {
+			createMany: {
+				data: internalEvents
+			}
+		};
+	}
+	if (publicEvents) {
+		createInput.PublicEvents = {
+			createMany: {
+				data: publicEvents
+			}
+		};
+	}
+	return createInput;
 }

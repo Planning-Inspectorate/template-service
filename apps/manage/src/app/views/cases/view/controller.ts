@@ -1,9 +1,17 @@
 import type { ManageService } from '#service';
-import type { Case } from '@pins/service-name-database/src/client/client.ts';
-import type { RequestHandler } from 'express';
-import { JOURNEY_ID } from './journey.ts';
+import type { CaseGetPayload } from '@pins/service-name-database/src/client/models/Case.ts';
 import { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
+import type { RequestHandler } from 'express';
+import { EVENT_TYPES } from '../events.ts';
 import type { CreateCaseAnswers } from '../save.ts';
+import { JOURNEY_ID } from './journey.ts';
+
+export type Case = CaseGetPayload<{
+	include: {
+		PublicEvents: true;
+		InternalEvents: true;
+	};
+}>;
 
 /**
  * Get data from the database to populate the journey response
@@ -17,7 +25,13 @@ export function buildGetJourneyMiddleware(service: ManageService): RequestHandle
 		}
 		service.logger.info({ id }, 'view case');
 
-		const caseDetails = await service.db.case.findUnique({ where: { id: Number(id) } });
+		const caseDetails = await service.db.case.findUnique({
+			where: { id: Number(id) },
+			include: {
+				PublicEvents: true,
+				InternalEvents: true
+			}
+		});
 		if (caseDetails === null) {
 			throw new Error('case not found');
 		}
@@ -34,10 +48,34 @@ export function buildGetJourneyMiddleware(service: ManageService): RequestHandle
 }
 
 function databaseToViewModel(caseDetails: Case): CreateCaseAnswers {
+	const events: CreateCaseAnswers['events'] = [];
+	if (caseDetails.PublicEvents) {
+		events.push(
+			...caseDetails.PublicEvents.map((e) => {
+				return {
+					id: EVENT_TYPES.PUBLIC + '-' + e.id.toString(),
+					eventType: EVENT_TYPES.PUBLIC,
+					eventDescription: e.description
+				};
+			})
+		);
+	}
+	if (caseDetails.InternalEvents) {
+		events.push(
+			...caseDetails.InternalEvents.map((e) => {
+				return {
+					id: EVENT_TYPES.INTERNAL + '-' + e.id.toString(),
+					eventType: EVENT_TYPES.INTERNAL,
+					eventDescription: e.description
+				};
+			})
+		);
+	}
 	return {
 		reference: caseDetails.reference,
 		description: caseDetails.description,
 		applicantCount: String(caseDetails.applicantCount),
-		submissionDate: caseDetails.submissionDate?.toISOString()
+		submissionDate: caseDetails.submissionDate?.toISOString(),
+		events
 	};
 }

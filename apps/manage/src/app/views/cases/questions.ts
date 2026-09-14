@@ -1,12 +1,13 @@
-import type { QuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.d.ts';
 import {
 	COMPONENT_TYPES,
 	createQuestions,
 	questionClasses,
+	type QuestionProps,
 	RequiredValidator
 } from '@planning-inspectorate/dynamic-forms';
+import { EVENT_TYPE_NAMES, EVENT_TYPES } from './events.ts';
 
-const questionProps: Record<string, QuestionProps> = {
+const questionProps = {
 	reference: {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		question: 'What is the reference for this case?',
@@ -59,7 +60,37 @@ const questionProps: Record<string, QuestionProps> = {
 		fieldName: 'submissionDate',
 		url: 'submission-date',
 		validators: []
+	},
+
+	events: {
+		type: COMPONENT_TYPES.MANAGE_LIST,
+		question: 'Add the events',
+		title: 'Events',
+		fieldName: 'events',
+		url: 'events'
+	},
+	eventType: {
+		type: COMPONENT_TYPES.RADIO,
+		question: 'What is the event type?',
+		title: 'Event type',
+		fieldName: 'eventType',
+		url: 'event-type',
+		options: Object.entries(EVENT_TYPES).map(([k, v]) => {
+			return {
+				text: EVENT_TYPE_NAMES[k as keyof typeof EVENT_TYPES],
+				value: v
+			};
+		})
+	},
+	eventDescription: {
+		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		question: 'Please provide a short description of the event',
+		title: 'Event description',
+		fieldName: 'eventDescription',
+		url: 'event-description'
 	}
-};
+} satisfies Record<string, QuestionProps>;
 
 export const questions = createQuestions(questionProps, questionClasses, {}, {});
+
+export type AllQuestions = typeof questions;

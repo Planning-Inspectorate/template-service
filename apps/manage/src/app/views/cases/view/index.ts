@@ -19,19 +19,23 @@ export function createRoutes(service: ManageService): IRouter {
 	// read 'answers'/data from the database
 	const getJourneyResponse = buildGetJourneyMiddleware(service);
 	const getJourney = buildGetJourney((req, journeyResponse) => createJourney(req, journeyResponse, questions));
-	const saveEdits = buildSave(buildSaveFn(service), true);
+	const saveFn = buildSaveFn(service);
+	const saveEdits = buildSave(saveFn, true);
+	const saveListEdits = buildSave(saveFn, false);
 
-	router.get('/', getJourneyResponse, getJourney, asyncHandler(buildList()));
+	router.use(getJourneyResponse, getJourney);
+
+	router.get('/', asyncHandler(buildList()));
 
 	// when any question is answered, return to the 'task list' or case details view
-	router.get('/:section/:question', getJourneyResponse, getJourney, question);
+	router.get('/:section/:question{/:manageListAction/:manageListItemId/:manageListQuestion}', question);
+
+	router.post('/:section/:question', validate, validationErrorHandler, asyncHandler(saveEdits));
 	router.post(
-		'/:section/:question',
-		getJourneyResponse,
-		getJourney,
+		'/:section/:question{/:manageListAction/:manageListItemId/:manageListQuestion}',
 		validate,
 		validationErrorHandler,
-		asyncHandler(saveEdits)
+		asyncHandler(saveListEdits)
 	);
 
 	return router;

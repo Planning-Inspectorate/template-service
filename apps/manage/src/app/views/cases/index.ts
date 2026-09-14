@@ -27,8 +27,20 @@ export function createRoutes(service: ManageService): IRouter {
 
 	router.use('/view/:id', createDetailsRoutes(service));
 
-	router.get('/:section/:question', getJourneyResponse, getJourney, question);
-	router.post('/:section/:question', getJourneyResponse, getJourney, validate, validationErrorHandler, saveToSession);
+	router.get(
+		'/:section/:question{/:manageListAction/:manageListItemId/:manageListQuestion}',
+		getJourneyResponse,
+		getJourney,
+		question
+	);
+	router.post(
+		'/:section/:question{/:manageListAction/:manageListItemId/:manageListQuestion}',
+		getJourneyResponse,
+		getJourney,
+		validate,
+		validationErrorHandler,
+		saveToSession
+	);
 
 	router.get('/check-your-answers', getJourneyResponse, getJourney, buildList());
 	router.post('/check-your-answers', getJourneyResponse, getJourney, saveToDatabase);

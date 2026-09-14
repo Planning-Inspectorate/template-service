@@ -27,4 +27,29 @@ model Case {
   applicantCount Int
   submissionDate DateTime?
   description    String
+
+  PublicEvents   PublicEvent[]
+  InternalEvents InternalEvent[]
+}
+
+model PublicEvent {
+  id     Int  @id @default(autoincrement())
+  caseId Int
+  Case   Case @relation(fields: [caseId], references: [id])
+
+  description String
+
+  eventDate  DateTime?
+  publicised Boolean?
+}
+
+model InternalEvent {
+  id     Int  @id @default(autoincrement())
+  caseId Int
+  Case   Case @relation(fields: [caseId], references: [id])
+
+  description String
+
+  eventOwner  String?
+  eventReason String?
 }

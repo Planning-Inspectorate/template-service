@@ -32,10 +32,10 @@
     "test-coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@azure/functions": "^4.16.2",
-    "@azure/identity": "^4.13.2",
-    "@azure/msal-node": "^6.0.0",
-    "@planning-inspectorate/core": "^1.8.0",
+    "@azure/functions": "^4.16.5",
+    "@azure/identity": "^4.13.3",
+    "@azure/msal-node": "^6.0.1",
+    "@planning-inspectorate/core": "^1.12.3",
     "@prisma/adapter-mssql": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@redis/entraid": "^6.2.1",
@@ -48,7 +48,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "express-validator": "^7.3.2",
-    "govuk-frontend": "^6.5.0",
+    "govuk-frontend": "^6.5.1",
     "helmet": "^8.3.0",
     "lusca": "^1.7.0",
     "nunjucks": "^3.2.4",

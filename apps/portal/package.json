@@ -15,17 +15,12 @@
     "@pins/service-name-database": "^0.0.0",
     "@pins/service-name-lib": "^0.0.0",
     "@planning-inspectorate/core": "*",
-    "body-parser": "*",
-    "connect-redis": "*",
     "express": "*",
     "express-session": "*",
     "express-validator": "*",
     "govuk-frontend": "*",
-    "helmet": "*",
     "nunjucks": "*",
-    "pino": "*",
-    "pino-pretty": "*",
-    "redis": "*"
+    "pino": "*"
   },
   "devDependencies": {
     "nodemon": "*",

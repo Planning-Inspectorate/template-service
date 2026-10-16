@@ -9,8 +9,7 @@ export default defineConfig([
 		files: ['**/*.ts'],
 		extends: [tseslint.configs.recommended],
 		rules: {
-			'@typescript-eslint/consistent-type-imports': 'error',
-			'@typescript-eslint/no-explicit-any': 'error'
+			'@typescript-eslint/consistent-type-imports': 'error'
 		}
 	}
 ]);
